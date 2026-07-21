@@ -1,0 +1,62 @@
+{
+  "definition": "A robust node has positive net CAGR, t-stat>1.96, MDD>-60% and mean order fill>=80%. A continent is a connected component under one-step parameter perturbations.",
+  "grid": {
+    "signals": [
+      "reversal_1m",
+      "momentum_6m",
+      "low_volatility",
+      "small_cap"
+    ],
+    "universe_pct": [
+      0.2,
+      0.30000000000000004,
+      0.4000000000000001,
+      0.5000000000000001,
+      0.6000000000000001,
+      0.7000000000000002,
+      0.8000000000000003,
+      0.9000000000000001,
+      1.0000000000000002
+    ],
+    "holdings": [
+      10,
+      20,
+      30,
+      50
+    ],
+    "aum_krw": [
+      100000000.0,
+      1000000000.0,
+      10000000000.0
+    ],
+    "cost_multipliers": [
+      0.5,
+      1.0,
+      1.5,
+      2.0
+    ]
+  },
+  "nodes_total": 1728,
+  "robust_nodes": 68,
+  "continents": [
+    {
+      "continent_id": 1,
+      "nodes": 56,
+      "signals": "low_volatility",
+      "mean_net_cagr": 0.06619590433619775,
+      "min_net_cagr": 0.046847743971045075,
+      "max_cost_multiplier": 2.0,
+      "aum_range": "100000000-1000000000"
+    },
+    {
+      "continent_id": 2,
+      "nodes": 12,
+      "signals": "small_cap",
+      "mean_net_cagr": 0.349652634154028,
+      "min_net_cagr": 0.24940034868735417,
+      "max_cost_multiplier": 2.0,
+      "aum_range": "100000000-1000000000"
+    }
+  ],
+  "warning": "This is a topology diagnostic, not a multiple-testing correction. Formal reality-check/permutation testing remains a separate gate."
+}
