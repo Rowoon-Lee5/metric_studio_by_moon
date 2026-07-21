@@ -58,7 +58,7 @@ def main():
                         for cost in COSTS:
                             one_way=.001+.005*cost*np.sqrt(ratio)
                             realised=(filled*ret).sum()/aum-2*(filled*one_way).sum()/aum
-                            k=(signal,float(p),n,float(aum),float(cost)); paths.setdefault(k,{'returns':[],'fills':[]})['returns'].append(realised); paths[k]['fills'].append(fill)
+                            k=(signal,float(p),n,float(aum),float(cost)); paths.setdefault(k,{'dates':[],'returns':[],'fills':[]})['dates'].append(date); paths[k]['returns'].append(realised); paths[k]['fills'].append(fill)
     for k,values in paths.items():
         signal,p,n,a,c=k; r=pd.Series(values['returns']).dropna(); t=float(r.mean()/(r.std(ddof=1)/np.sqrt(len(r)))) if r.std(ddof=1)>0 else 0.0; pv=float(2*(1-NormalDist().cdf(abs(t))) )
         rows.append({'key':node_key(*k),'signal':signal,'universe_pct':p,'holdings':n,'aum_krw':a,'cost_multiplier':c,'months':len(r),'net_cagr':cagr(r),'mdd':mdd(r),'t_stat':t,'p_value':pv,'mean_fill':float(np.mean(values['fills']))})
@@ -71,6 +71,11 @@ def main():
         sub=summary[summary.key.isin([node_key(*k) for k in g])]
         records.append({'continent_id':i,'nodes':len(g),'signals':','.join(sorted(sub.signal.unique())),'mean_net_cagr':float(sub.net_cagr.mean()),'min_net_cagr':float(sub.net_cagr.min()),'max_cost_multiplier':float(sub.cost_multiplier.max()),'aum_range':f'{sub.aum_krw.min():.0f}-{sub.aum_krw.max():.0f}'})
     continents=pd.DataFrame(records); summary.to_csv(OUT/'alpha_topology_nodes.csv',index=False,encoding='utf-8-sig'); continents.to_csv(OUT/'alpha_topology_continents.csv',index=False,encoding='utf-8-sig')
+    monthly=[]
+    for k,values in paths.items():
+        key=node_key(*k)
+        monthly.extend({'date':d,'key':key,'net_return':r} for d,r in zip(values['dates'],values['returns']))
+    pd.DataFrame(monthly).to_csv(OUT/'alpha_topology_monthly_returns.csv',index=False,encoding='utf-8-sig')
     report={'definition':'A robust node has positive net CAGR, t-stat>1.96, MDD>-60% and mean order fill>=80%. A continent is a connected component under one-step parameter perturbations.','grid':{'signals':list(specs),'universe_pct':PCTS.tolist(),'holdings':NS,'aum_krw':AUMS,'cost_multipliers':COSTS},'nodes_total':int(len(summary)),'robust_nodes':int(summary.robust.sum()),'continents':records,'warning':'This is a topology diagnostic, not a multiple-testing correction. Formal reality-check/permutation testing remains a separate gate.'}
     (OUT/'alpha_topology_report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8'); print(json.dumps(report,ensure_ascii=False,indent=2))
 if __name__=='__main__':main()

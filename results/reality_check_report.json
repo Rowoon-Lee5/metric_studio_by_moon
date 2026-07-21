@@ -1,0 +1,508 @@
+{
+  "method": {
+    "bootstrap": "moving block bootstrap",
+    "replications": 1000,
+    "block_months": 6,
+    "seed": 20260721,
+    "null": "each strategy is mean-centred; time blocks are resampled jointly across all strategies"
+  },
+  "common_sample": {
+    "months": 309,
+    "strategies": 1728,
+    "start": "2000-08-31",
+    "end": "2026-04-30"
+  },
+  "observed_max_t": 6.074238306495263,
+  "family_wise_p_value": 0.000999000999000999,
+  "best_node": {
+    "signal": "small_cap",
+    "universe_pct": 0.9000000000000001,
+    "holdings": 50,
+    "aum_krw": 100000000.0,
+    "cost_multiplier": 0.5,
+    "net_cagr": 0.4305808038682028,
+    "mdd": -0.4929351595060285,
+    "t_stat": 6.074238306495262,
+    "mean_fill": 0.97623457826098,
+    "key": "small_cap|p0.9|n50|a100000000|c0.5"
+  },
+  "robust_nodes_with_reality_p": [
+    {
+      "key": "small_cap|p0.9|n50|a100000000|c0.5",
+      "signal": "small_cap",
+      "net_cagr": 0.4305808038682028,
+      "t_stat": 6.074238306495262,
+      "reality_check_p": 0.000999000999000999
+    },
+    {
+      "key": "small_cap|p0.9|n50|a100000000|c1.0",
+      "signal": "small_cap",
+      "net_cagr": 0.4238188170889398,
+      "t_stat": 6.00425935715497,
+      "reality_check_p": 0.000999000999000999
+    },
+    {
+      "key": "small_cap|p0.9|n50|a100000000|c1.5",
+      "signal": "small_cap",
+      "net_cagr": 0.4170860046212683,
+      "t_stat": 5.934278679237305,
+      "reality_check_p": 0.000999000999000999
+    },
+    {
+      "key": "small_cap|p0.9|n50|a100000000|c2.0",
+      "signal": "small_cap",
+      "net_cagr": 0.4103822525291452,
+      "t_stat": 5.864296407774692,
+      "reality_check_p": 0.000999000999000999
+    },
+    {
+      "key": "small_cap|p0.8|n50|a100000000|c0.5",
+      "signal": "small_cap",
+      "net_cagr": 0.374138501298304,
+      "t_stat": 5.256493851632823,
+      "reality_check_p": 0.000999000999000999
+    },
+    {
+      "key": "small_cap|p0.8|n50|a100000000|c1.0",
+      "signal": "small_cap",
+      "net_cagr": 0.3692398100022529,
+      "t_stat": 5.207336675130963,
+      "reality_check_p": 0.000999000999000999
+    },
+    {
+      "key": "small_cap|p0.8|n50|a100000000|c1.5",
+      "signal": "small_cap",
+      "net_cagr": 0.3643570310382453,
+      "t_stat": 5.158175881673517,
+      "reality_check_p": 0.000999000999000999
+    },
+    {
+      "key": "small_cap|p0.8|n50|a100000000|c2.0",
+      "signal": "small_cap",
+      "net_cagr": 0.359490117692981,
+      "t_stat": 5.1090115338198485,
+      "reality_check_p": 0.000999000999000999
+    },
+    {
+      "key": "small_cap|p0.8|n50|a1000000000|c0.5",
+      "signal": "small_cap",
+      "net_cagr": 0.2740175222168062,
+      "t_stat": 4.927322592821654,
+      "reality_check_p": 0.000999000999000999
+    },
+    {
+      "key": "small_cap|p0.8|n50|a1000000000|c1.0",
+      "signal": "small_cap",
+      "net_cagr": 0.2657630189716264,
+      "t_stat": 4.813817141900798,
+      "reality_check_p": 0.000999000999000999
+    },
+    {
+      "key": "small_cap|p0.8|n50|a1000000000|c1.5",
+      "signal": "small_cap",
+      "net_cagr": 0.2575573818332082,
+      "t_stat": 4.7003088867108485,
+      "reality_check_p": 0.000999000999000999
+    },
+    {
+      "key": "small_cap|p0.8|n50|a1000000000|c2.0",
+      "signal": "small_cap",
+      "net_cagr": 0.2494003486873541,
+      "t_stat": 4.586798340513388,
+      "reality_check_p": 0.000999000999000999
+    },
+    {
+      "key": "low_volatility|p0.9|n30|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0737433478961528,
+      "t_stat": 2.911917911409444,
+      "reality_check_p": 0.1108891108891109
+    },
+    {
+      "key": "low_volatility|p0.9|n50|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0783906659776645,
+      "t_stat": 2.8985354871708675,
+      "reality_check_p": 0.11288711288711288
+    },
+    {
+      "key": "low_volatility|p0.8|n20|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0799729995737466,
+      "t_stat": 2.824399929836204,
+      "reality_check_p": 0.12187812187812187
+    },
+    {
+      "key": "low_volatility|p0.8|n50|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0830371084297587,
+      "t_stat": 2.788833350724844,
+      "reality_check_p": 0.13086913086913088
+    },
+    {
+      "key": "low_volatility|p0.9|n50|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0722473670492669,
+      "t_stat": 2.708145076966493,
+      "reality_check_p": 0.15184815184815184
+    },
+    {
+      "key": "low_volatility|p0.8|n30|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0756497579060795,
+      "t_stat": 2.681596791655946,
+      "reality_check_p": 0.15684315684315683
+    },
+    {
+      "key": "low_volatility|p0.9|n30|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0666878887996886,
+      "t_stat": 2.6745640381552787,
+      "reality_check_p": 0.15684315684315683
+    },
+    {
+      "key": "low_volatility|p0.7|n50|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0814174392076576,
+      "t_stat": 2.6676037796854386,
+      "reality_check_p": 0.15684315684315683
+    },
+    {
+      "key": "low_volatility|p0.8|n50|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0784110759243288,
+      "t_stat": 2.662793393624307,
+      "reality_check_p": 0.15884115884115885
+    },
+    {
+      "key": "low_volatility|p0.7|n30|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0793890898765357,
+      "t_stat": 2.6519278496370973,
+      "reality_check_p": 0.15984015984015984
+    },
+    {
+      "key": "low_volatility|p0.8|n20|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0733006470449373,
+      "t_stat": 2.629492099826397,
+      "reality_check_p": 0.16483516483516483
+    },
+    {
+      "key": "low_volatility|p0.9|n20|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0614644914400448,
+      "t_stat": 2.5988971282269246,
+      "reality_check_p": 0.17382617382617382
+    },
+    {
+      "key": "low_volatility|p0.7|n50|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0780380659567971,
+      "t_stat": 2.579359565845599,
+      "reality_check_p": 0.1838161838161838
+    },
+    {
+      "key": "low_volatility|p0.8|n50|a100000000|c1.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0738029411378298,
+      "t_stat": 2.5367056982580545,
+      "reality_check_p": 0.1938061938061938
+    },
+    {
+      "key": "low_volatility|p0.7|n30|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0750221205618473,
+      "t_stat": 2.535116397044748,
+      "reality_check_p": 0.1938061938061938
+    },
+    {
+      "key": "low_volatility|p0.9|n50|a100000000|c1.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0661359906378542,
+      "t_stat": 2.517730302349256,
+      "reality_check_p": 0.1958041958041958
+    },
+    {
+      "key": "low_volatility|p0.8|n30|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0698589759969876,
+      "t_stat": 2.5138916587793925,
+      "reality_check_p": 0.1958041958041958
+    },
+    {
+      "key": "low_volatility|p0.7|n50|a100000000|c1.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0746681994609104,
+      "t_stat": 2.491081070693463,
+      "reality_check_p": 0.19880119880119881
+    },
+    {
+      "key": "low_volatility|p0.7|n10|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0732030312301645,
+      "t_stat": 2.473878219641468,
+      "reality_check_p": 0.2017982017982018
+    },
+    {
+      "key": "low_volatility|p0.6|n50|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.074309277289444,
+      "t_stat": 2.438392525636744,
+      "reality_check_p": 0.21178821178821178
+    },
+    {
+      "key": "low_volatility|p0.9|n30|a100000000|c1.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0596747418470853,
+      "t_stat": 2.4372405669575583,
+      "reality_check_p": 0.2127872127872128
+    },
+    {
+      "key": "low_volatility|p0.8|n20|a100000000|c1.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0666658635616204,
+      "t_stat": 2.434555609622587,
+      "reality_check_p": 0.2127872127872128
+    },
+    {
+      "key": "low_volatility|p0.7|n20|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0703540905198303,
+      "t_stat": 2.428735097543516,
+      "reality_check_p": 0.2137862137862138
+    },
+    {
+      "key": "low_volatility|p0.7|n30|a100000000|c1.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0706711129368511,
+      "t_stat": 2.4182552924295053,
+      "reality_check_p": 0.21578421578421578
+    },
+    {
+      "key": "low_volatility|p0.8|n50|a100000000|c2.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0692126418476539,
+      "t_stat": 2.41057280509784,
+      "reality_check_p": 0.22277722277722278
+    },
+    {
+      "key": "low_volatility|p0.7|n50|a100000000|c2.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0713078157985038,
+      "t_stat": 2.4027696289715497,
+      "reality_check_p": 0.22577422577422576
+    },
+    {
+      "key": "low_volatility|p0.6|n50|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0719298787642348,
+      "t_stat": 2.377653018536122,
+      "reality_check_p": 0.23876123876123875
+    },
+    {
+      "key": "low_volatility|p0.8|n30|a100000000|c1.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0640965545788305,
+      "t_stat": 2.346151910571669,
+      "reality_check_p": 0.25074925074925075
+    },
+    {
+      "key": "low_volatility|p0.8|n10|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0621470229226128,
+      "t_stat": 2.340191471006698,
+      "reality_check_p": 0.25374625374625376
+    },
+    {
+      "key": "low_volatility|p0.9|n20|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0541330348273645,
+      "t_stat": 2.335405472471908,
+      "reality_check_p": 0.25374625374625376
+    },
+    {
+      "key": "low_volatility|p0.9|n50|a100000000|c2.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0600563867165999,
+      "t_stat": 2.32729501229999,
+      "reality_check_p": 0.25874125874125875
+    },
+    {
+      "key": "low_volatility|p0.6|n50|a100000000|c1.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0695552441821472,
+      "t_stat": 2.316895215804489,
+      "reality_check_p": 0.2627372627372627
+    },
+    {
+      "key": "low_volatility|p0.7|n30|a100000000|c2.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0663360146928762,
+      "t_stat": 2.3013470099833726,
+      "reality_check_p": 0.2707292707292707
+    },
+    {
+      "key": "low_volatility|p0.7|n10|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0665368418853735,
+      "t_stat": 2.2944356709964198,
+      "reality_check_p": 0.2757242757242757
+    },
+    {
+      "key": "low_volatility|p0.7|n20|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0651885967683483,
+      "t_stat": 2.287369238462332,
+      "reality_check_p": 0.2777222777222777
+    },
+    {
+      "key": "low_volatility|p0.6|n30|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0672494489061246,
+      "t_stat": 2.2632434266283794,
+      "reality_check_p": 0.2937062937062937
+    },
+    {
+      "key": "low_volatility|p0.7|n50|a1000000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0588515859764682,
+      "t_stat": 2.259378479700548,
+      "reality_check_p": 0.2947052947052947
+    },
+    {
+      "key": "low_volatility|p0.6|n50|a100000000|c2.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0671853649808598,
+      "t_stat": 2.2561194555069304,
+      "reality_check_p": 0.2957042957042957
+    },
+    {
+      "key": "low_volatility|p0.8|n20|a100000000|c2.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0600684579641668,
+      "t_stat": 2.239595351565409,
+      "reality_check_p": 0.3026973026973027
+    },
+    {
+      "key": "low_volatility|p0.9|n30|a100000000|c2.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0527036773984592,
+      "t_stat": 2.1999542888219783,
+      "reality_check_p": 0.31368631368631367
+    },
+    {
+      "key": "low_volatility|p0.6|n50|a1000000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.061683585769348,
+      "t_stat": 2.1843574121774707,
+      "reality_check_p": 0.3176823176823177
+    },
+    {
+      "key": "low_volatility|p0.6|n30|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.064111103047499,
+      "t_stat": 2.1822088801275306,
+      "reality_check_p": 0.3206793206793207
+    },
+    {
+      "key": "low_volatility|p0.8|n30|a100000000|c2.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0583623683542993,
+      "t_stat": 2.178381453808599,
+      "reality_check_p": 0.3226773226773227
+    },
+    {
+      "key": "low_volatility|p0.7|n20|a100000000|c1.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0600457109202188,
+      "t_stat": 2.1459643297561426,
+      "reality_check_p": 0.33966033966033965
+    },
+    {
+      "key": "low_volatility|p0.6|n10|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.063242608394004,
+      "t_stat": 2.1264037460698875,
+      "reality_check_p": 0.34265734265734266
+    },
+    {
+      "key": "low_volatility|p0.7|n10|a100000000|c1.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0599083184921753,
+      "t_stat": 2.1149444877679517,
+      "reality_check_p": 0.34765234765234765
+    },
+    {
+      "key": "low_volatility|p0.8|n10|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0547253285843114,
+      "t_stat": 2.1131358643849163,
+      "reality_check_p": 0.34765234765234765
+    },
+    {
+      "key": "low_volatility|p0.6|n20|a100000000|c0.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.060140339874527,
+      "t_stat": 2.103780680062953,
+      "reality_check_p": 0.35064935064935066
+    },
+    {
+      "key": "low_volatility|p0.6|n30|a100000000|c1.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.0609810899225864,
+      "t_stat": 2.101142384961267,
+      "reality_check_p": 0.35264735264735264
+    },
+    {
+      "key": "low_volatility|p0.9|n20|a100000000|c1.5",
+      "signal": "low_volatility",
+      "net_cagr": 0.046847743971045,
+      "t_stat": 2.0719030492816426,
+      "reality_check_p": 0.36563436563436563
+    },
+    {
+      "key": "low_volatility|p0.7|n50|a1000000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0518543781249787,
+      "t_stat": 2.04250899095102,
+      "reality_check_p": 0.37662337662337664
+    },
+    {
+      "key": "low_volatility|p0.6|n30|a100000000|c2.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0578593896899353,
+      "t_stat": 2.0200448068507617,
+      "reality_check_p": 0.3886113886113886
+    },
+    {
+      "key": "low_volatility|p0.6|n50|a1000000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0552947819718059,
+      "t_stat": 2.0084543485745328,
+      "reality_check_p": 0.3926073926073926
+    },
+    {
+      "key": "low_volatility|p0.7|n20|a100000000|c2.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0549253439715635,
+      "t_stat": 2.0045236272477447,
+      "reality_check_p": 0.39760239760239763
+    },
+    {
+      "key": "low_volatility|p0.6|n20|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0563024870830446,
+      "t_stat": 2.0019266280719994,
+      "reality_check_p": 0.3986013986013986
+    },
+    {
+      "key": "low_volatility|p0.6|n10|a100000000|c1.0",
+      "signal": "low_volatility",
+      "net_cagr": 0.0580112061820219,
+      "t_stat": 1.9938585767719,
+      "reality_check_p": 0.4005994005994006
+    }
+  ],
+  "interpretation": "The p-value answers whether the best t-statistic among the full tested grid exceeds what zero-mean, temporally-blocked returns could produce. It is a family-wise guard, not proof of economic causality."
+}
