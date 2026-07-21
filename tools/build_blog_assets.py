@@ -16,6 +16,8 @@ from collections import defaultdict
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
+import pandas as pd
+import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 RESULTS = ROOT / "results"
@@ -215,12 +217,13 @@ def evidence_summary() -> None:
 
 def news_attention_chart() -> None:
     report = json.loads((RESULTS / "news_attention_report.json").read_text(encoding="utf-8"))
+    audit = json.loads((RESULTS / "robustness_audit_report.json").read_text(encoding="utf-8"))
     rows = report["attention_bucket_momentum_predictability"]
     labels = ["뉴스량 하위", "중간", "뉴스량 상위"]
     values = [row["mean_rank_ic_12m"] for row in rows]
     image = Image.new("RGB", (1200, 620), "white")
     draw = ImageDraw.Draw(image)
-    draw.text((60, 32), "실제 뉴스량은 거래회전율 대리변수 해석을 지지하지 않았다", fill="#1F2937", font=font(25, True))
+    draw.text((60, 32), "뉴스량 상·하위의 모멘텀 IC 차이는 불확실했다", fill="#1F2937", font=font(25, True))
     draw.text((60, 63), "관측 뉴스량 3분위별 6개월 모멘텀의 평균 12개월 Rank IC", fill="#6B7280", font=font(15))
     x0, y_base, scale = 165, 480, 3400
     draw.line((130, y_base, 1130, y_base), fill="#9CA3AF", width=2)
@@ -236,30 +239,28 @@ def news_attention_chart() -> None:
         draw.text((x + 24, y_base - height - 34), f"IC {value:.3f}", fill="#1F2937", font=font(18, True))
         draw.text((x + 22, y_base + 20), label, fill="#1F2937", font=font(15, True))
         draw.text((x + 13, y_base + 47), f"192개월 · 월평균 {row['mean_n']:.1f}종목", fill="#6B7280", font=font(13))
-    draw.text((60, 565), "표본: 70종목, 8,399개 종목-월 관측치, 2000.06~2025.04. 뉴스량이 많을수록 모멘텀 IC는 낮지 않고 오히려 높았다.", fill="#374151", font=font(14))
+    ci = audit["news_dependence_audit"]["moving_block_bootstrap"]["ci_95"]
+    draw.text((60, 565), f"상위-하위 IC 차이 0.023, 12개월 블록 부트스트랩 95% CI [{ci[0]:.3f}, {ci[1]:.3f}]. 방향 차이는 통계적으로 확정되지 않았다.", fill="#374151", font=font(14))
     save_png(image, "03_observed_news_attention.png")
 
 
 def consensus_cumulative_chart() -> None:
-    rows = list(csv.DictReader((RESULTS / "epistemic_stability_returns.csv").open(encoding="utf-8")))
-    wealth = 100.0
-    values: list[float] = []
-    for row in rows:
-        if row["stability_return"]:
-            wealth *= 1 + float(row["stability_return"])
-            values.append(wealth)
+    rows = pd.read_csv(RESULTS / "consensus_benchmark_monthly.csv")
+    values = (1 + rows.stability_return).cumprod().mul(100).tolist()
+    component_values = (1 + rows.mean_component_return).cumprod().mul(100).tolist()
     image = Image.new("RGB", (1200, 620), "white")
     draw = ImageDraw.Draw(image)
     draw.text((60, 32), "모델 합의는 더 안전한 포트폴리오를 만들지 못했다", fill="#1F2937", font=font(25, True))
-    draw.text((60, 63), "가장 많은 모델 표를 받은 상위 30종목 포트폴리오의 100원 기준 누적자산", fill="#6B7280", font=font(15))
+    draw.text((60, 63), "모델 합의 상위 30종목과 48개 구성요소 전략의 동일가중 평균을 비교한 100원 기준 누적자산", fill="#6B7280", font=font(15))
     left, top, right, bottom = 100, 130, 1130, 490
     draw.line((left, bottom, right, bottom), fill="#9CA3AF", width=2)
     draw.line((left, top, left, bottom), fill="#9CA3AF", width=2)
-    max_v = max(100.0, max(values))
-    for tick in [0, 25, 50, 75, 100]:
+    max_v = max(100.0, max(values), max(component_values))
+    ticks = np.linspace(0, max_v, 5)
+    for tick in ticks:
         y = bottom - int((tick / max_v) * (bottom - top))
         draw.line((left, y, right, y), fill="#E5E7EB", width=1)
-        draw.text((55, y - 8), str(tick), fill="#6B7280", font=font(13))
+        draw.text((45, y - 8), str(int(round(tick))), fill="#6B7280", font=font(13))
     points = []
     for index, value in enumerate(values):
         x = left + int(index * (right - left) / max(len(values) - 1, 1))
@@ -267,9 +268,18 @@ def consensus_cumulative_chart() -> None:
         points.append((x, y))
     if len(points) > 1:
         draw.line(points, fill="#E76F51", width=3)
+    component_points = []
+    for index, value in enumerate(component_values):
+        x = left + int(index * (right - left) / max(len(component_values) - 1, 1))
+        y = bottom - int((value / max_v) * (bottom - top))
+        component_points.append((x, y))
+    if len(component_points) > 1:
+        draw.line(component_points, fill="#247BA0", width=3)
+    draw.text((810, 112), "주황: 모델 합의 상위 30종목", fill="#E76F51", font=font(13, True))
+    draw.text((810, 136), "파랑: 48개 구성요소 전략 평균", fill="#247BA0", font=font(13, True))
     draw.text((100, 510), "2000", fill="#6B7280", font=font(13))
     draw.text((1040, 510), "2026", fill="#6B7280", font=font(13))
-    draw.text((60, 565), f"월별 318개 관측치 · 최종 누적자산 {values[-1]:.1f} · CAGR -12.9%. 같은 가격·거래량·시총 데이터에서 나온 표 수는 독립적 증거가 아니다.", fill="#374151", font=font(14))
+    draw.text((60, 565), f"모델 합의 최종 {values[-1]:.1f}, CAGR -12.9% · 구성요소 평균 최종 {component_values[-1]:.1f}, CAGR 5.8%. 표 수가 많아도 독립적 증거는 아니었다.", fill="#374151", font=font(14))
     save_png(image, "04_model_consensus_cumulative.png")
 
 
