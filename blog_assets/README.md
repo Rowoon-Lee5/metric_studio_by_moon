@@ -13,6 +13,7 @@
 7. `07_book_excerpt_strategy.png` — 3편 도입부의 책 발췌
 8. `08_book_excerpt_mixed_results.png` — 4편 도입부의 책 발췌
 9. `09_book_excerpt_liquidity.png` — 1편 도입부의 책 발췌
+10. `10_suspension_screened_smallcap.png` — 1편 거래정지 보정 결과 뒤
 
 PNG는 네이버 블로그 업로드용이고, SVG는 확대·재편집을 위한 원본이다.
 

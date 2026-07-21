@@ -307,6 +307,32 @@ def failure_coherence_chart() -> None:
     save_png(image, "05_model_failure_coherence.png")
 
 
+def suspension_screen_chart() -> None:
+    report = json.loads((RESULTS / "suspension_screen_audit_report.json").read_text(encoding="utf-8"))
+    rows = {row["variant"]: row for row in report["summary"]}
+    labels = [("기존 조합", "unfiltered", "#B7C0CC"), ("거래정지 제외", "suspension_screened", "#247BA0")]
+    image = Image.new("RGB", (1200, 560), "white")
+    draw = ImageDraw.Draw(image)
+    draw.text((60, 32), "거래정지 상태를 실제 선택 규칙에 넣어도 소형주 결과는 남았다", fill="#1F2937", font=font(25, True))
+    draw.text((60, 63), "유동성 상위 90% · 소형주 50종목 · 1억 원 · 비용 0.5배", fill="#6B7280", font=font(15))
+    base_y, scale = 410, 550
+    draw.line((130, base_y, 1100, base_y), fill="#9CA3AF", width=2)
+    for tick in [0, .2, .4, .6]:
+        y = base_y - int(tick * scale)
+        draw.line((130, y, 1100, y), fill="#E5E7EB", width=1)
+        draw.text((65, y - 8), f"{tick * 100:.0f}%", fill="#6B7280", font=font(13))
+    for index, (label, key, color) in enumerate(labels):
+        row = rows[key]
+        x = 280 + index * 360
+        h = int(row["cagr"] * scale)
+        draw.rounded_rectangle((x, base_y - h, x + 180, base_y), radius=6, fill=color)
+        draw.text((x + 35, base_y - h - 34), f"CAGR {row['cagr'] * 100:.1f}%", fill="#1F2937", font=font(20, True))
+        draw.text((x + 45, base_y + 20), label, fill="#1F2937", font=font(16, True))
+        draw.text((x + 24, base_y + 48), f"t={row['t_stat']:.2f} · MDD {row['mdd'] * 100:.1f}%", fill="#6B7280", font=font(14))
+    draw.text((60, 515), f"원본 거래정지 패널에서 비정상 상태 {report['suspension_flag_rows']:,}건, {report['flagged_tickers']:,}개 종목을 선택 시점에 제외했다.", fill="#374151", font=font(14))
+    save_png(image, "10_suspension_screened_smallcap.png")
+
+
 def main() -> None:
     with (RESULTS / "alpha_topology_nodes.csv").open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
@@ -315,6 +341,7 @@ def main() -> None:
     news_attention_chart()
     consensus_cumulative_chart()
     failure_coherence_chart()
+    suspension_screen_chart()
     book_excerpt_card(
         "09_book_excerpt_liquidity.png",
         "유동성이 미치는 영향",
