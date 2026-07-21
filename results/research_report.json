@@ -1,0 +1,42 @@
+{
+  "sample": {
+    "start": "1999-12-28",
+    "end": "2026-05-04",
+    "monthly_snapshots": 318,
+    "tickers": 3717
+  },
+  "assumptions": {
+    "signal": "monthly 1-month reversal; bottom 30",
+    "cost": "10bp + 50bp*sqrt(order/21-day ADV), one-way",
+    "turnover": "100% monthly"
+  },
+  "net_cagr_optimum_by_aum": [
+    {
+      "universe_pct": 1.0000000000000002,
+      "aum_krw": 100000000,
+      "months": 316,
+      "gross_cagr": 0.04083241905834978,
+      "net_cagr": 0.014860695278375635,
+      "avg_one_way_cost": 0.0010453055910173272,
+      "avg_adv": 1095608198364.9955
+    },
+    {
+      "universe_pct": 1.0000000000000002,
+      "aum_krw": 1000000000,
+      "months": 316,
+      "gross_cagr": 0.04083241905834978,
+      "net_cagr": 0.012463983295870396,
+      "avg_one_way_cost": 0.0011432688583548189,
+      "avg_adv": 1095608198364.9955
+    },
+    {
+      "universe_pct": 1.0000000000000002,
+      "aum_krw": 10000000000,
+      "months": 316,
+      "gross_cagr": 0.04083241905834978,
+      "net_cagr": 0.004917619175717203,
+      "avg_one_way_cost": 0.0014530559101732716,
+      "avg_adv": 1095608198364.9955
+    }
+  ]
+}
