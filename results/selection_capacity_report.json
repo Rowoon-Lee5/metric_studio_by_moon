@@ -1,0 +1,100 @@
+{
+  "assumptions": {
+    "signals": "bottom 30 by 1-month return; top 30 by 6-month return",
+    "liquidity_universe": "top 20% through 100% by 21-day ADV",
+    "max_participation_per_name": "5% of 21-day ADV at rebalance",
+    "unfilled_capital": "cash",
+    "impact_cost": "one-way 10bp + 50bp*sqrt(order/ADV)"
+  },
+  "optimal_implementable_frontier": [
+    {
+      "signal": "momentum_6m",
+      "universe_pct": 0.7000000000000002,
+      "aum_krw": 100000000,
+      "months": 311,
+      "ideal_cagr": -0.20272103112022732,
+      "realised_cagr": -0.22486582288221757,
+      "mean_executed_fraction": 0.9996367917962022,
+      "mean_effective_n": 29.997496085854834,
+      "mean_one_way_cost": 0.0011467276593830106
+    },
+    {
+      "signal": "momentum_6m",
+      "universe_pct": 1.0000000000000002,
+      "aum_krw": 1000000000,
+      "months": 311,
+      "ideal_cagr": -0.1963750046524516,
+      "realised_cagr": -0.2303207079071734,
+      "mean_executed_fraction": 0.8990500969358329,
+      "mean_effective_n": 27.991434513670832,
+      "mean_one_way_cost": 0.0013875983407239346
+    },
+    {
+      "signal": "momentum_6m",
+      "universe_pct": 1.0000000000000002,
+      "aum_krw": 10000000000,
+      "months": 311,
+      "ideal_cagr": -0.1963750046524516,
+      "realised_cagr": -0.2240208936016994,
+      "mean_executed_fraction": 0.6774760946379808,
+      "mean_effective_n": 23.880806505681424,
+      "mean_one_way_cost": 0.0016768811491236597
+    },
+    {
+      "signal": "momentum_6m",
+      "universe_pct": 1.0000000000000002,
+      "aum_krw": 100000000000,
+      "months": 311,
+      "ideal_cagr": -0.1963750046524516,
+      "realised_cagr": -0.14153884624510737,
+      "mean_executed_fraction": 0.3162597774193926,
+      "mean_effective_n": 15.828980709616408,
+      "mean_one_way_cost": 0.0018908830575089818
+    },
+    {
+      "signal": "reversal_1m",
+      "universe_pct": 1.0000000000000002,
+      "aum_krw": 100000000,
+      "months": 311,
+      "ideal_cagr": -0.007049895812285323,
+      "realised_cagr": -0.08477054017901153,
+      "mean_executed_fraction": 0.9664968201132561,
+      "mean_effective_n": 29.2617216550028,
+      "mean_one_way_cost": 0.001207061662208289
+    },
+    {
+      "signal": "reversal_1m",
+      "universe_pct": 1.0000000000000002,
+      "aum_krw": 1000000000,
+      "months": 311,
+      "ideal_cagr": -0.007049895812285323,
+      "realised_cagr": -0.13039111201777653,
+      "mean_executed_fraction": 0.8814717061090368,
+      "mean_effective_n": 27.807412155669464,
+      "mean_one_way_cost": 0.0014590736208930915
+    },
+    {
+      "signal": "reversal_1m",
+      "universe_pct": 1.0000000000000002,
+      "aum_krw": 10000000000,
+      "months": 311,
+      "ideal_cagr": -0.007049895812285323,
+      "realised_cagr": -0.11499727652121283,
+      "mean_executed_fraction": 0.5893267273951249,
+      "mean_effective_n": 22.27949125095816,
+      "mean_one_way_cost": 0.0017158976012863893
+    },
+    {
+      "signal": "reversal_1m",
+      "universe_pct": 0.9000000000000001,
+      "aum_krw": 100000000000,
+      "months": 311,
+      "ideal_cagr": -0.05506564646172174,
+      "realised_cagr": -0.07671784729536413,
+      "mean_executed_fraction": 0.25428250534339714,
+      "mean_effective_n": 13.974456757575453,
+      "mean_one_way_cost": 0.0018824022011837552
+    }
+  ],
+  "interpretation": "effective_n measures execution concentration. If it falls below requested N, apparent diversification is not realised diversification."
+}
