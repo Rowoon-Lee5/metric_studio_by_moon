@@ -71,7 +71,7 @@ def set_cell_margins(cell, top=80, start=120, bottom=80, end=120):
         node.set(qn("w:type"), "dxa")
 
 
-def style_document(doc):
+def style_document(doc, with_footer=True):
     section = doc.sections[0]
     section.top_margin = Inches(1)
     section.bottom_margin = Inches(1)
@@ -110,10 +110,11 @@ def style_document(doc):
     caption.paragraph_format.space_after = Pt(12)
     caption.paragraph_format.line_spacing = 1.15
 
-    footer = section.footer.paragraphs[0]
-    footer.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    run = footer.add_run("문병로 교수의 메트릭 스튜디오 02 | 연구 노트")
-    set_font(run, 8.5, color=(100, 100, 100))
+    if with_footer:
+        footer = section.footer.paragraphs[0]
+        footer.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        run = footer.add_run("문병로 교수의 메트릭 스튜디오 02 | 연구 노트")
+        set_font(run, 8.5, color=(100, 100, 100))
 
 
 def add_cover(doc, subtitle_text="2장 시장관찰 | ②~④\n관심, 합의, 실패 공분산", description="책의 문장을 요약하지 않고, 실제 한국 주식 데이터로\n가설의 측정 방식과 실패 조건을 검증한 연구 기록"):
