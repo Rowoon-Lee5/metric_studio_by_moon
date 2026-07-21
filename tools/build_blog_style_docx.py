@@ -62,6 +62,18 @@ def make_post(draft_name: str, output_name: str):
 def main():
     for draft, output in OUTPUTS.items():
         make_post(draft, output)
+    combined = Document()
+    packet.style_document(combined, with_footer=False)
+    for index, draft in enumerate(OUTPUTS):
+        if index:
+            combined.add_page_break()
+        packet.add_article(combined, draft)
+    combined.core_properties.title = "문병로 교수의 메트릭 스튜디오 02 | 블로그 게시용 ①~④"
+    combined.core_properties.author = "beneficial5"
+    combined.core_properties.subject = "문병로 교수의 메트릭 스튜디오 02 블로그 원고"
+    combined_output = packet.ROOT / "deliverables" / "문병로_교수의_메트릭_스튜디오_02_01부터_04_블로그_게시용.docx"
+    combined.save(combined_output)
+    print(combined_output)
 
 
 if __name__ == "__main__":
