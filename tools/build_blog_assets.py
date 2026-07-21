@@ -154,7 +154,7 @@ def evidence_summary() -> None:
         '<rect width="1200" height="560" fill="#FFFFFF"/>',
         '<style>text{font-family:Arial,sans-serif;fill:#1F2937}.muted{fill:#6B7280}.title{font-size:25px;font-weight:700}.sub{font-size:15px}.label{font-size:18px;font-weight:700}.value{font-size:26px;font-weight:700}.small{font-size:14px}.box{stroke:#D1D5DB;stroke-width:1.5}</style>',
         '<text x="60" y="52" class="title">이 실험이 말하는 것과 말하지 않는 것</text>',
-        '<text x="60" y="78" class="muted sub">KRX 수정주가·거래량·시가총액 패널 · 1,728개 조합 · 월별 309개 관측치</text>',
+        '<text x="60" y="78" class="muted sub">KRX 수정주가·거래량·시가총액 패널 · 1,728개 조합 · 월별 310개 관측치</text>',
         '<rect x="60" y="115" width="510" height="185" rx="8" fill="#F8FAFC" class="box"/>',
         '<text x="88" y="151" class="label">연결된 견고 전략 영역</text>',
     ]
@@ -179,8 +179,9 @@ def evidence_summary() -> None:
         f'<text x="658" y="254" class="small">비용 차감 CAGR {best["net_cagr"] * 100:.1f}% · MDD {best["mdd"] * 100:.1f}% · 평균 체결률 {best["mean_fill"] * 100:.1f}%</text>',
         '<rect x="60" y="342" width="1080" height="145" rx="8" fill="#FFF7ED" stroke="#FB923C" stroke-width="1.5"/>',
         '<text x="88" y="380" class="label">결론의 경계</text>',
-        '<text x="88" y="412" class="small">상장폐지 원본 1,336코드는 수정주가에 모두 포함됐다. 거래정지 종목은 편입 시점에 제외했다.</text>',
-        '<text x="88" y="442" class="small">부트스트랩은 ‘많이 돌려 우연히 최고 결과를 찾았다’는 설명을 기각한다. 경제적 원인은 아직 검정 대상이다.</text>',
+        '<text x="88" y="402" class="small">상장폐지 원본 1,336코드는 수정주가에 모두 포함됐다. 거래정지 종목은 편입 시점에 제외했다.</text>',
+        '<text x="88" y="432" class="small">그러나 다음 가격이 없는 433개 보유-월의 실제 결제값은 별도 사건 자료로 연결해야 한다.</text>',
+        '<text x="88" y="462" class="small">부트스트랩은 ‘많이 돌려 우연히 최고 결과를 찾았다’는 설명을 기각한다. 경제적 원인은 아직 검정 대상이다.</text>',
         '<text x="60" y="528" class="muted small">출처: alpha_topology_nodes.csv · alpha_topology_continents.csv · reality_check_report.json</text>',
         '</svg>',
     ])
@@ -189,7 +190,7 @@ def evidence_summary() -> None:
     image = Image.new("RGB", (1200, 560), "white")
     draw = ImageDraw.Draw(image)
     draw.text((60, 32), "이 실험이 말하는 것과 말하지 않는 것", fill="#1F2937", font=font(25, True))
-    draw.text((60, 63), "KRX 수정주가·거래량·시가총액 패널 · 1,728개 조합 · 월별 309개 관측치", fill="#6B7280", font=font(15))
+    draw.text((60, 63), "KRX 수정주가·거래량·시가총액 패널 · 1,728개 조합 · 월별 310개 관측치", fill="#6B7280", font=font(15))
     draw.rounded_rectangle((60, 115, 570, 300), radius=8, fill="#F8FAFC", outline="#D1D5DB", width=2)
     draw.text((88, 137), "연결된 견고 전략 영역", fill="#1F2937", font=font(18, True))
     y = 181
@@ -209,8 +210,9 @@ def evidence_summary() -> None:
     draw.text((658, 247), f"비용 차감 CAGR {best['net_cagr'] * 100:.1f}% · MDD {best['mdd'] * 100:.1f}% · 평균 체결률 {best['mean_fill'] * 100:.1f}%", fill="#1F2937", font=font(14))
     draw.rounded_rectangle((60, 342, 1140, 487), radius=8, fill="#FFF7ED", outline="#FB923C", width=2)
     draw.text((88, 364), "결론의 경계", fill="#1F2937", font=font(18, True))
-    draw.text((88, 402), "상장폐지 원본 1,336코드는 수정주가에 모두 포함됐다. 거래정지 종목은 편입 시점에 제외했다.", fill="#1F2937", font=font(14))
-    draw.text((88, 434), "부트스트랩은 ‘많이 돌려 우연히 최고 결과를 찾았다’는 설명을 기각한다. 경제적 원인은 아직 검정 대상이다.", fill="#1F2937", font=font(14))
+    draw.text((88, 392), "상장폐지 원본 1,336코드는 수정주가에 모두 포함됐다. 거래정지 종목은 편입 시점에 제외했다.", fill="#1F2937", font=font(14))
+    draw.text((88, 422), "그러나 다음 가격이 없는 433개 보유-월의 실제 결제값은 별도 사건 자료로 연결해야 한다.", fill="#1F2937", font=font(14))
+    draw.text((88, 452), "부트스트랩은 ‘많이 돌려 우연히 최고 결과를 찾았다’는 설명을 기각한다. 경제적 원인은 아직 검정 대상이다.", fill="#1F2937", font=font(14))
     draw.text((60, 518), "출처: alpha_topology_nodes.csv · alpha_topology_continents.csv · reality_check_report.json", fill="#6B7280", font=font(14))
     save_png(image, "02_evidence_decision_boundary.png")
 
