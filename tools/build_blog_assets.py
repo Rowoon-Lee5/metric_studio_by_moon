@@ -193,11 +193,98 @@ def evidence_summary() -> None:
     save_png(image, "02_evidence_decision_boundary.png")
 
 
+def news_attention_chart() -> None:
+    report = json.loads((RESULTS / "news_attention_report.json").read_text(encoding="utf-8"))
+    rows = report["attention_bucket_momentum_predictability"]
+    labels = ["Low news", "Middle", "High news"]
+    values = [row["mean_rank_ic_12m"] for row in rows]
+    image = Image.new("RGB", (1200, 620), "white")
+    draw = ImageDraw.Draw(image)
+    draw.text((60, 32), "Observed news volume does not support the turnover proxy story", fill="#1F2937", font=font(25, True))
+    draw.text((60, 63), "Mean 12-month Rank IC of 6-month momentum by observed-news tertile", fill="#6B7280", font=font(15))
+    x0, y_base, scale = 165, 480, 3400
+    draw.line((130, y_base, 1130, y_base), fill="#9CA3AF", width=2)
+    for tick in [0.00, 0.04, 0.08]:
+        y = y_base - int(tick * scale)
+        draw.line((130, y, 1130, y), fill="#E5E7EB", width=1)
+        draw.text((78, y - 8), f"{tick:.02f}", fill="#6B7280", font=font(13))
+    for index, (label, value, row) in enumerate(zip(labels, values, rows)):
+        x = x0 + index * 310
+        height = int(value * scale)
+        color = "#247BA0" if index != 2 else "#E76F51"
+        draw.rounded_rectangle((x, y_base - height, x + 150, y_base), radius=5, fill=color)
+        draw.text((x + 24, y_base - height - 34), f"IC {value:.3f}", fill="#1F2937", font=font(18, True))
+        draw.text((x + 22, y_base + 20), label, fill="#1F2937", font=font(15, True))
+        draw.text((x + 13, y_base + 47), f"192 months · mean n {row['mean_n']:.1f}", fill="#6B7280", font=font(13))
+    draw.text((60, 565), "Sample: 70 stocks, 8,399 stock-month observations, Jun 2000–Apr 2025. Higher news volume coincided with higher—not lower—momentum IC.", fill="#374151", font=font(14))
+    save_png(image, "03_observed_news_attention.png")
+
+
+def consensus_cumulative_chart() -> None:
+    rows = list(csv.DictReader((RESULTS / "epistemic_stability_returns.csv").open(encoding="utf-8")))
+    wealth = 100.0
+    values: list[float] = []
+    for row in rows:
+        if row["stability_return"]:
+            wealth *= 1 + float(row["stability_return"])
+            values.append(wealth)
+    image = Image.new("RGB", (1200, 620), "white")
+    draw = ImageDraw.Draw(image)
+    draw.text((60, 32), "Model agreement did not create a safer portfolio", fill="#1F2937", font=font(25, True))
+    draw.text((60, 63), "KRW 100 indexed wealth of the top-30 portfolio selected by the most model votes", fill="#6B7280", font=font(15))
+    left, top, right, bottom = 100, 130, 1130, 490
+    draw.line((left, bottom, right, bottom), fill="#9CA3AF", width=2)
+    draw.line((left, top, left, bottom), fill="#9CA3AF", width=2)
+    max_v = max(100.0, max(values))
+    for tick in [0, 25, 50, 75, 100]:
+        y = bottom - int((tick / max_v) * (bottom - top))
+        draw.line((left, y, right, y), fill="#E5E7EB", width=1)
+        draw.text((55, y - 8), str(tick), fill="#6B7280", font=font(13))
+    points = []
+    for index, value in enumerate(values):
+        x = left + int(index * (right - left) / max(len(values) - 1, 1))
+        y = bottom - int((value / max_v) * (bottom - top))
+        points.append((x, y))
+    if len(points) > 1:
+        draw.line(points, fill="#E76F51", width=3)
+    draw.text((100, 510), "2000", fill="#6B7280", font=font(13))
+    draw.text((1040, 510), "2026", fill="#6B7280", font=font(13))
+    draw.text((60, 565), f"318 monthly observations · final indexed wealth {values[-1]:.1f} · CAGR -12.9%. A vote count is not independent evidence when every model begins with the same price-volume-cap data.", fill="#374151", font=font(14))
+    save_png(image, "04_model_consensus_cumulative.png")
+
+
+def failure_coherence_chart() -> None:
+    rows = list(csv.DictReader((RESULTS / "model_failure_state_summary.csv").open(encoding="utf-8-sig")))
+    image = Image.new("RGB", (1200, 650), "white")
+    draw = ImageDraw.Draw(image)
+    draw.text((60, 32), "The next-month market return worsened as more signals failed together", fill="#1F2937", font=font(25, True))
+    draw.text((60, 63), "Mean next-month equal-weight market return after 0–4 factor-model failures", fill="#6B7280", font=font(15))
+    center_y, x0, bar_w, step, scale = 320, 190, 130, 190, 1200
+    draw.line((120, center_y, 1130, center_y), fill="#6B7280", width=2)
+    draw.text((72, center_y - 10), "0%", fill="#6B7280", font=font(13))
+    for index, row in enumerate(rows):
+        mean = float(row["mean"])
+        x = x0 + index * step
+        h = int(abs(mean) * scale)
+        color = "#247BA0" if mean >= 0 else "#E76F51"
+        coords = (x, center_y - h, x + bar_w, center_y) if mean >= 0 else (x, center_y, x + bar_w, center_y + h)
+        draw.rounded_rectangle(coords, radius=5, fill=color)
+        label_y = center_y - h - 32 if mean >= 0 else center_y + h + 7
+        draw.text((x + 25, label_y), f"{mean * 100:.1f}%", fill="#1F2937", font=font(18, True))
+        draw.text((x + 20, 535), f"{row['failure_coherence']} failures", fill="#1F2937", font=font(14, True))
+        draw.text((x + 42, 560), f"n = {row['size']}", fill="#6B7280", font=font(13))
+    draw.text((60, 605), "The pattern is hypothesis-generating only: states with 3 or 4 failures have n = 2 and n = 5 respectively, far too small for a trading rule.", fill="#374151", font=font(14))
+    save_png(image, "05_model_failure_coherence.png")
+
+
 def main() -> None:
     with (RESULTS / "alpha_topology_nodes.csv").open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
     topology_map(rows)
     evidence_summary()
+    news_attention_chart()
+    consensus_cumulative_chart()
+    failure_coherence_chart()
 
 
 if __name__ == "__main__":
