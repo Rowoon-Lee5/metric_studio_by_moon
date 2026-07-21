@@ -1,0 +1,72 @@
+{
+  "alpha_hysteresis": [
+    {
+      "path": "contract",
+      "months": 309,
+      "mean_return": 0.009184218892403954,
+      "cagr": 0.09871478775280318,
+      "mean_holdings": 27.110032362459545,
+      "mean_banned_share": 0.24946489482390422
+    },
+    {
+      "path": "expand",
+      "months": 307,
+      "mean_return": 0.008333446244241207,
+      "cagr": 0.0858578655707607,
+      "mean_holdings": 19.55700325732899,
+      "mean_banned_share": 0.4155329503464178
+    }
+  ],
+  "epistemic_stability": {
+    "months": 318,
+    "cagr": -0.1292496598552163,
+    "mean_monthly_return": -0.005463054318079412,
+    "mean_vote_top30": 13.757389428263217
+  },
+  "model_failure_states": [
+    {
+      "failure_coherence": 0,
+      "size": 219,
+      "mean": 0.031829612125550855,
+      "median": 0.02943631945030708
+    },
+    {
+      "failure_coherence": 1,
+      "size": 63,
+      "mean": -0.009011912701833085,
+      "median": -0.01302932796900417
+    },
+    {
+      "failure_coherence": 2,
+      "size": 29,
+      "mean": -0.05997509682448602,
+      "median": -0.057702435643174614
+    },
+    {
+      "failure_coherence": 3,
+      "size": 2,
+      "mean": -0.07413343041316921,
+      "median": -0.07413343041316921
+    },
+    {
+      "failure_coherence": 4,
+      "size": 5,
+      "mean": -0.14645418011897787,
+      "median": -0.11777748570200465
+    }
+  ],
+  "information_age": {
+    "matched_observations": 529714,
+    "tickers_with_dates": 4691,
+    "fresh_mid_stale_next_1m": {
+      "1": 0.009640864893539712,
+      "2": 0.008486705676122773,
+      "3": 0.011060737709445712
+    }
+  },
+  "warnings": [
+    "Hysteresis uses six-month contraction/expansion paths and a one-month exclusion cooldown; it is a policy counterfactual, not claimed as an intrinsic market law.",
+    "Epistemic stability measures model-configuration consensus, not investor consensus.",
+    "Disclosure cache provenance and survivorship require a separate audit."
+  ]
+}

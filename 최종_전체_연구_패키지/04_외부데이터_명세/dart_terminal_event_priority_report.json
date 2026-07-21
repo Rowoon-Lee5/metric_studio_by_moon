@@ -1,0 +1,7 @@
+{
+  "filing_candidates": 1938,
+  "terminal_ticker_months_with_candidate": 325,
+  "document_queue_rows": 868,
+  "priority_0_or_1_rows": 589,
+  "rule": "At most three official filing documents per terminal ticker-month, ranked by settlement relevance then date proximity. This queue is not a settlement dataset."
+}

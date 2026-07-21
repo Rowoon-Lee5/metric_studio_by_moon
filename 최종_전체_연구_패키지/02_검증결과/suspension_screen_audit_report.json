@@ -1,0 +1,24 @@
+{
+  "screen": "At formation, exclude any stock whose supplied Dataguide status is not 정상.",
+  "suspension_flag_rows": 13385,
+  "flagged_tickers": 1908,
+  "strategy": "small_cap|liquidity_top_90pct|50_holdings|KRW100m|cost_0.5x",
+  "summary": [
+    {
+      "variant": "suspension_screened",
+      "months": 318,
+      "mean_return": 0.037145289872621085,
+      "cagr": 0.46593739352933183,
+      "t_stat": 6.550308442777293,
+      "mdd": -0.4460745797647988
+    },
+    {
+      "variant": "unfiltered",
+      "months": 318,
+      "mean_return": 0.03224622075979596,
+      "cagr": 0.38729534056920967,
+      "t_stat": 5.79176030027646,
+      "mdd": -0.49062822445323706
+    }
+  ]
+}

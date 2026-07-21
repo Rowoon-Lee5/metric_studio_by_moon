@@ -1,0 +1,131 @@
+{
+  "sample": {
+    "start": "1999-12-28",
+    "end": "2026-05-04",
+    "observations": 583530,
+    "tickers": 3713
+  },
+  "market_distribution": {
+    "monthly_up_probability": 0.5691823899371069,
+    "monthly_return_skew": 0.6203459054274704,
+    "monthly_excess_kurtosis": 5.034294109066275,
+    "monthly_market_cagr": 0.11646900141309535
+  },
+  "quintile_tests": [
+    {
+      "test": "low_volatility_vs_future_1m",
+      "bottom_bucket_mean_pct": 1.3398641169639243,
+      "top_bucket_mean_pct": 0.17070340944754228,
+      "spread_pct": -1.169160707516382,
+      "months": 309
+    },
+    {
+      "test": "price_level_vs_future_1m",
+      "bottom_bucket_mean_pct": 2.5971461746442897,
+      "top_bucket_mean_pct": 0.1792360920932602,
+      "spread_pct": -2.4179100825510296,
+      "months": 317
+    },
+    {
+      "test": "six_month_momentum_vs_future_12m",
+      "bottom_bucket_mean_pct": 8.027567370147356,
+      "top_bucket_mean_pct": 11.15755483632051,
+      "spread_pct": 3.129987466173155,
+      "months": 300
+    },
+    {
+      "test": "size_vs_future_1m",
+      "bottom_bucket_mean_pct": 3.1219123963492192,
+      "top_bucket_mean_pct": 0.6152126693686986,
+      "spread_pct": -2.5066997269805205,
+      "months": 317
+    },
+    {
+      "test": "turnover_proxy_vs_future_1m",
+      "bottom_bucket_mean_pct": 1.926133801720225,
+      "top_bucket_mean_pct": -0.4050576180967224,
+      "spread_pct": -2.3311914198169474,
+      "months": 317
+    }
+  ],
+  "shock_persistence": [
+    {
+      "bucket": "negative_shock:high_turnover",
+      "mean_return": -0.005040161513607169,
+      "n": 7088
+    },
+    {
+      "bucket": "negative_shock:low_turnover",
+      "mean_return": 0.14847703235798207,
+      "n": 542
+    },
+    {
+      "bucket": "ordinary:high_turnover",
+      "mean_return": 0.007466304211801203,
+      "n": 262141
+    },
+    {
+      "bucket": "ordinary:low_turnover",
+      "mean_return": 0.01662157657696566,
+      "n": 287374
+    },
+    {
+      "bucket": "positive_shock:high_turnover",
+      "mean_return": -0.008940146421417673,
+      "n": 22620
+    },
+    {
+      "bucket": "positive_shock:low_turnover",
+      "mean_return": 0.024604555943778944,
+      "n": 3765
+    }
+  ],
+  "long_only_risk_overlay": {
+    "fully_invested": {
+      "cagr": 0.11646900141309535,
+      "annualized_vol": 0.2662581270850435,
+      "mdd": -0.5900444553877164,
+      "months": 317
+    },
+    "cash_vol_target_12pct": {
+      "cagr": 0.07262835694990932,
+      "annualized_vol": 0.1452540470600793,
+      "mdd": -0.3395261645450499,
+      "months": 317
+    },
+    "meaning": "Cash is the hedge; no short position is used. This is a risk-overlay test, not an alpha test."
+  },
+  "stop_loss_counterfactual": {
+    "monthly_close_buy_and_hold_12m": {
+      "mean_12m_return": 0.12701829591068786,
+      "median_12m_return": -0.03883068103572024,
+      "loss_probability": 0.5415034629451895,
+      "observations": 539714
+    },
+    "stop_rules": [
+      {
+        "stop_threshold": 0.1,
+        "mean_12m_return": 0.08170478478338812,
+        "median_12m_return": -0.12222222222222223,
+        "loss_probability": 0.7084437313095454,
+        "observations": 539714
+      },
+      {
+        "stop_threshold": 0.2,
+        "mean_12m_return": 0.09908315718444835,
+        "median_12m_return": -0.1794815810099653,
+        "loss_probability": 0.6183182203907995,
+        "observations": 539714
+      },
+      {
+        "stop_threshold": 0.3,
+        "mean_12m_return": 0.1094142296288011,
+        "median_12m_return": -0.07753705109382492,
+        "loss_probability": 0.5743060213372267,
+        "observations": 539714
+      }
+    ],
+    "warning": "This is a market-wide holding-rule counterfactual, not a trading strategy. Intramonth barriers, transaction costs and re-entry are not observed."
+  },
+  "identification_warning": "Turnover is not investor attention; this dataset contains neither search/news/ownership attention nor executable bid-ask spreads. Results are associations, not causal evidence."
+}

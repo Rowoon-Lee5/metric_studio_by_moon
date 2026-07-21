@@ -1,0 +1,217 @@
+{
+  "panel_integrity": {
+    "max_allowed_monthly_gap_days": 40,
+    "non_contiguous_links": 21,
+    "tickers_with_non_contiguous_links": 19,
+    "rows_before_reentry_quarantine": 593279,
+    "rows_after_reentry_quarantine": 591515
+  },
+  "execution_cost": {
+    "existing_model": "0.10% + 0.50 × 0.50% × sqrt(order_value / ADV), charged on both sides; full monthly rebalance convention",
+    "baseline": {
+      "months": 318,
+      "net_cagr": 0.38729534056920967,
+      "t_stat": 5.79176030027646,
+      "mean_fill": 0.9743756017193771
+    },
+    "break_even_additional_one_way_bp": 141.23588597641753,
+    "endpoint_sensitivity": [
+      {
+        "endpoint_convention": "neutral_cash_at_last_price",
+        "months": 318,
+        "terminal_unpriced_holdings": 436,
+        "net_cagr": 0.38729534056920967,
+        "t_stat": 5.79176030027646,
+        "mdd": -0.49062822445323706
+      },
+      {
+        "endpoint_convention": "total_loss_at_unpriced_endpoint",
+        "months": 318,
+        "terminal_unpriced_holdings": 436,
+        "net_cagr": -1.0,
+        "t_stat": 0.8206837787540506,
+        "mdd": -1.000500054939294
+      }
+    ],
+    "interpretation": "This is an implied historical-cost threshold, not an observed bid/ask spread. Historical quote data must be compared against it rather than replaced by a current snapshot.",
+    "historical_quote_input_contract": {
+      "required_columns": [
+        "timestamp",
+        "ticker",
+        "best_bid",
+        "best_ask",
+        "bid_size",
+        "ask_size"
+      ],
+      "join_key": "ticker plus a quote timestamp no later than the documented rebalance cutoff"
+    }
+  },
+  "timing_and_research_freedom": {
+    "decision_lag": [
+      {
+        "delay_months": 0,
+        "months": 318,
+        "net_cagr": 0.38729534056920967,
+        "t_stat": 5.79176030027646,
+        "mdd": -0.49062822445323706
+      },
+      {
+        "delay_months": 1,
+        "months": 317,
+        "net_cagr": 0.28425970873383344,
+        "t_stat": 4.816467446517024,
+        "mdd": -0.6316144583962089
+      },
+      {
+        "delay_months": 2,
+        "months": 316,
+        "net_cagr": 0.25949198099992055,
+        "t_stat": 4.674013859716226,
+        "mdd": -0.5930140209540506
+      },
+      {
+        "delay_months": 3,
+        "months": 315,
+        "net_cagr": 0.26135407884248085,
+        "t_stat": 4.865222066418992,
+        "mdd": -0.5399832456131382
+      }
+    ],
+    "leave_block_out": [
+      {
+        "held_out_block": "2000_2004",
+        "selected_on_other_blocks": "small_cap|p0.9|n50|a100000000|c0.5",
+        "months": 53,
+        "net_cagr": 0.3052191050932742,
+        "t_stat": 1.712713760900534,
+        "mdd": -0.24326961028274152
+      },
+      {
+        "held_out_block": "2005_2009",
+        "selected_on_other_blocks": "small_cap|p0.9|n50|a100000000|c0.5",
+        "months": 60,
+        "net_cagr": 0.5893192150456401,
+        "t_stat": 3.005173489815503,
+        "mdd": -0.4138516899853417
+      },
+      {
+        "held_out_block": "2010_2014",
+        "selected_on_other_blocks": "small_cap|p0.9|n50|a100000000|c0.5",
+        "months": 60,
+        "net_cagr": 0.18309628489716467,
+        "t_stat": 1.7932317098532045,
+        "mdd": -0.2799113262577063
+      },
+      {
+        "held_out_block": "2015_2019",
+        "selected_on_other_blocks": "small_cap|p0.9|n50|a100000000|c0.5",
+        "months": 60,
+        "net_cagr": 0.6993846731082376,
+        "t_stat": 4.536407753223699,
+        "mdd": -0.20351860055902937
+      },
+      {
+        "held_out_block": "2020_2026",
+        "selected_on_other_blocks": "small_cap|p0.9|n50|a100000000|c0.5",
+        "months": 77,
+        "net_cagr": 0.25367479050125974,
+        "t_stat": 2.7850386202440403,
+        "mdd": -0.16490869943438358
+      }
+    ],
+    "protocol": {
+      "version": "chapter2-protocol-v1",
+      "frozen_after_results": true,
+      "future_validation_rule": "No signal, parameter, cost convention, or acceptance threshold may be changed before a new untouched evaluation window is scored.",
+      "candidate_grid": {
+        "signals": [
+          "reversal_1m",
+          "momentum_6m",
+          "low_volatility",
+          "small_cap"
+        ],
+        "liquidity_percentiles": [
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8,
+          0.9,
+          1.0
+        ],
+        "holdings": [
+          10,
+          20,
+          30,
+          50
+        ],
+        "aum_krw": [
+          100000000.0,
+          1000000000.0,
+          10000000000.0
+        ],
+        "cost_multipliers": [
+          0.5,
+          1.0,
+          1.5,
+          2.0
+        ]
+      },
+      "selected_candidate": "small_cap|p0.9|n50|a100000000|c0.5",
+      "acceptance": "positive net CAGR, t-stat > 1.96, MDD > -60%, mean fill >= 80%, and no failure under one-month decision lag"
+    }
+  },
+  "attention_measurement": {
+    "months": 192,
+    "mean_spearman_news_turnover": -0.03481151841221362,
+    "mean_top_decile_overlap": 0.07429887930141897,
+    "cross_measurement_momentum": [
+      {
+        "news_high": false,
+        "turnover_high": false,
+        "months": 192,
+        "mean_n": 35.791666666666664,
+        "mean_rank_ic_12m": 0.028176745141779088
+      },
+      {
+        "news_high": false,
+        "turnover_high": true,
+        "months": 192,
+        "mean_n": 35.744791666666664,
+        "mean_rank_ic_12m": 0.04914645422407893
+      },
+      {
+        "news_high": true,
+        "turnover_high": false,
+        "months": 192,
+        "mean_n": 35.744791666666664,
+        "mean_rank_ic_12m": 0.00131794468090747
+      },
+      {
+        "news_high": true,
+        "turnover_high": true,
+        "months": 192,
+        "mean_n": 36.276041666666664,
+        "mean_rank_ic_12m": 0.07718894423078175
+      }
+    ],
+    "conclusion": "News count and turnover are empirically distinct measurements in the overlapping universe; neither is promoted to an investor-attention latent variable."
+  },
+  "size_mechanism": {
+    "months": 309,
+    "mean_standardized_coefficients": {
+      "size": 0.0011442326314732262,
+      "liquidity": -0.008538761756443861,
+      "momentum": -0.0018960832878726769,
+      "volatility": -0.0030543262833445063
+    },
+    "size_coefficient_block_bootstrap_ci_95": [
+      -0.0023697512574621564,
+      0.004784373756668537
+    ],
+    "mean_size_liquidity_rank_correlation": 0.43404883555541773,
+    "interpretation": "A controlled size coefficient is an association after observed liquidity, momentum, and volatility controls. It is not a causal risk-premium decomposition."
+  }
+}

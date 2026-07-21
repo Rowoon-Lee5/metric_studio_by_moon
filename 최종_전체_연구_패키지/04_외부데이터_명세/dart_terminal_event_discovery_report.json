@@ -1,0 +1,6 @@
+{
+  "terminal_candidate_rows": 436,
+  "mapped_to_dart_corp_code": 365,
+  "official_filing_candidates": 1938,
+  "note": "No cash settlement is inferred from a filing title. Inspect document.xml for each candidate before creating corporate_actions.csv."
+}

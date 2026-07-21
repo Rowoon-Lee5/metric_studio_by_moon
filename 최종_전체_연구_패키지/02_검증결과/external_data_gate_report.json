@@ -1,0 +1,43 @@
+{
+  "holdings": {
+    "rows": 15900,
+    "tickers": 1399,
+    "start": "1999-12-28",
+    "end": "2026-05-04"
+  },
+  "corporate_actions": {
+    "status": "missing_file",
+    "expected_path": "C:\\Users\\benef\\OneDrive\\바탕 화면\\책\\문병로 교수의 메트릭 스튜디오\\문병로 교수의 메트릭 스튜디오 02\\external_data\\corporate_actions.csv",
+    "required_columns": [
+      "cash_settlement",
+      "event_date",
+      "event_type",
+      "ticker"
+    ],
+    "meaning": "상장폐지·합병·감자·청산의 실제 현금 결제값. successor_ticker와 stock_settlement_ratio가 있으면 함께 제공."
+  },
+  "historical_quotes": {
+    "status": "missing_file",
+    "expected_path": "C:\\Users\\benef\\OneDrive\\바탕 화면\\책\\문병로 교수의 메트릭 스튜디오\\문병로 교수의 메트릭 스튜디오 02\\external_data\\historical_quotes.parquet",
+    "required_columns": [
+      "ask_size",
+      "best_ask",
+      "best_bid",
+      "bid_size",
+      "ticker",
+      "timestamp"
+    ],
+    "meaning": "리밸런싱 시점 이전 최우선 호가와 잔량. 분봉 또는 스냅샷 모두 가능하나 timestamp는 필수."
+  },
+  "security_master": {
+    "status": "missing_file",
+    "expected_path": "C:\\Users\\benef\\OneDrive\\바탕 화면\\책\\문병로 교수의 메트릭 스튜디오\\문병로 교수의 메트릭 스튜디오 02\\external_data\\security_master.csv",
+    "required_columns": [
+      "effective_from",
+      "security_type",
+      "ticker"
+    ],
+    "meaning": "일자별 보통주·우선주·ETF·리츠·스팩 구분 및 코드변경 매핑. effective_to, predecessor_ticker, successor_ticker 권장."
+  },
+  "gate_status": "blocked_missing_external_data"
+}

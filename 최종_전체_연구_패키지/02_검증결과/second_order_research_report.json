@@ -1,0 +1,267 @@
+{
+  "alpha_half_life": [
+    {
+      "implementation_delay_months": 0,
+      "cagr": -0.13763410492483974,
+      "annual_vol": 0.3423762806085466,
+      "mdd": -0.9769646386122554,
+      "months": 250,
+      "unique_selected_models": 7,
+      "most_selected_model": "reversal_top_100"
+    },
+    {
+      "implementation_delay_months": 1,
+      "cagr": -0.10997026528498077,
+      "annual_vol": 0.35100657614122266,
+      "mdd": -0.9657964637765248,
+      "months": 249,
+      "unique_selected_models": 7,
+      "most_selected_model": "reversal_top_100"
+    },
+    {
+      "implementation_delay_months": 3,
+      "cagr": -0.1014328983790298,
+      "annual_vol": 0.34854791963588444,
+      "mdd": -0.9457557073464874,
+      "months": 247,
+      "unique_selected_models": 7,
+      "most_selected_model": "reversal_top_100"
+    },
+    {
+      "implementation_delay_months": 6,
+      "cagr": -0.13521397658199363,
+      "annual_vol": 0.3354610232950341,
+      "mdd": -0.9625215507445167,
+      "months": 244,
+      "unique_selected_models": 7,
+      "most_selected_model": "reversal_top_100"
+    },
+    {
+      "implementation_delay_months": 12,
+      "cagr": -0.09525338523876192,
+      "annual_vol": 0.3386597316449684,
+      "mdd": -0.9537921727861175,
+      "months": 238,
+      "unique_selected_models": 7,
+      "most_selected_model": "reversal_top_100"
+    }
+  ],
+  "liquidity_as_information_censorship": [
+    {
+      "signal": "momentum",
+      "universe_pct": 0.2,
+      "months": 318,
+      "mean_recall": 0.539727463312369,
+      "mean_signal_dispersion": 0.7112840453991732,
+      "mean_next_1m_return": -0.022992480085550118
+    },
+    {
+      "signal": "momentum",
+      "universe_pct": 0.30000000000000004,
+      "months": 318,
+      "mean_recall": 0.6794549266247379,
+      "mean_signal_dispersion": 0.6636854949901113,
+      "mean_next_1m_return": -0.021545735304846506
+    },
+    {
+      "signal": "momentum",
+      "universe_pct": 0.4000000000000001,
+      "months": 318,
+      "mean_recall": 0.770545073375262,
+      "mean_signal_dispersion": 0.631994274582877,
+      "mean_next_1m_return": -0.01816185811338635
+    },
+    {
+      "signal": "momentum",
+      "universe_pct": 0.5000000000000001,
+      "months": 318,
+      "mean_recall": 0.8364779874213837,
+      "mean_signal_dispersion": 0.6051943403201705,
+      "mean_next_1m_return": -0.01598106967875663
+    },
+    {
+      "signal": "momentum",
+      "universe_pct": 0.6000000000000001,
+      "months": 318,
+      "mean_recall": 0.878825995807128,
+      "mean_signal_dispersion": 0.5784624685325476,
+      "mean_next_1m_return": -0.01418471430878509
+    },
+    {
+      "signal": "momentum",
+      "universe_pct": 0.7000000000000002,
+      "months": 318,
+      "mean_recall": 0.9094339622641509,
+      "mean_signal_dispersion": 0.553502530725873,
+      "mean_next_1m_return": -0.012865199093572324
+    },
+    {
+      "signal": "momentum",
+      "universe_pct": 0.8000000000000003,
+      "months": 318,
+      "mean_recall": 0.929140461215933,
+      "mean_signal_dispersion": 0.5297757214137623,
+      "mean_next_1m_return": -0.012792988634361855
+    },
+    {
+      "signal": "momentum",
+      "universe_pct": 0.9000000000000001,
+      "months": 318,
+      "mean_recall": 0.9468553459119498,
+      "mean_signal_dispersion": 0.5112579996204882,
+      "mean_next_1m_return": -0.013368910189461911
+    },
+    {
+      "signal": "momentum",
+      "universe_pct": 1.0000000000000002,
+      "months": 318,
+      "mean_recall": 0.9779874213836478,
+      "mean_signal_dispersion": 0.4964777503342599,
+      "mean_next_1m_return": -0.012366994519132595
+    },
+    {
+      "signal": "reversal",
+      "universe_pct": 0.2,
+      "months": 318,
+      "mean_recall": 0.4270440251572327,
+      "mean_signal_dispersion": 0.26774938836437623,
+      "mean_next_1m_return": -0.007499989727503873
+    },
+    {
+      "signal": "reversal",
+      "universe_pct": 0.30000000000000004,
+      "months": 318,
+      "mean_recall": 0.5733752620545074,
+      "mean_signal_dispersion": 0.25281050587634313,
+      "mean_next_1m_return": -0.007392813941287876
+    },
+    {
+      "signal": "reversal",
+      "universe_pct": 0.4000000000000001,
+      "months": 318,
+      "mean_recall": 0.6932914046121593,
+      "mean_signal_dispersion": 0.23810657100309857,
+      "mean_next_1m_return": -0.006604918710119663
+    },
+    {
+      "signal": "reversal",
+      "universe_pct": 0.5000000000000001,
+      "months": 318,
+      "mean_recall": 0.779874213836478,
+      "mean_signal_dispersion": 0.2266927500877284,
+      "mean_next_1m_return": -0.006682153166219533
+    },
+    {
+      "signal": "reversal",
+      "universe_pct": 0.6000000000000001,
+      "months": 318,
+      "mean_recall": 0.8436058700209643,
+      "mean_signal_dispersion": 0.2154430933794522,
+      "mean_next_1m_return": -0.0057228870744945644
+    },
+    {
+      "signal": "reversal",
+      "universe_pct": 0.7000000000000002,
+      "months": 318,
+      "mean_recall": 0.8902515723270441,
+      "mean_signal_dispersion": 0.20580301927144537,
+      "mean_next_1m_return": -0.001537982923924152
+    },
+    {
+      "signal": "reversal",
+      "universe_pct": 0.8000000000000003,
+      "months": 318,
+      "mean_recall": 0.9258909853249476,
+      "mean_signal_dispersion": 0.19694100174969004,
+      "mean_next_1m_return": 0.003963240655971506
+    },
+    {
+      "signal": "reversal",
+      "universe_pct": 0.9000000000000001,
+      "months": 318,
+      "mean_recall": 0.9473794549266247,
+      "mean_signal_dispersion": 0.19010193996004576,
+      "mean_next_1m_return": 0.004739242148820273
+    },
+    {
+      "signal": "reversal",
+      "universe_pct": 1.0000000000000002,
+      "months": 318,
+      "mean_recall": 0.9778825995807127,
+      "mean_signal_dispersion": 0.18484923696279532,
+      "mean_next_1m_return": 0.008805169408720614
+    }
+  ],
+  "attention_proxy_predictability": [
+    {
+      "turnover_bucket": 1,
+      "signal": "ret_1m",
+      "rank_ic_12m": 0.01652624182808435
+    },
+    {
+      "turnover_bucket": 1,
+      "signal": "ret_6m",
+      "rank_ic_12m": 0.04418286530030961
+    },
+    {
+      "turnover_bucket": 2,
+      "signal": "ret_1m",
+      "rank_ic_12m": 0.017556185304255654
+    },
+    {
+      "turnover_bucket": 2,
+      "signal": "ret_6m",
+      "rank_ic_12m": 0.033978344726043774
+    },
+    {
+      "turnover_bucket": 3,
+      "signal": "ret_1m",
+      "rank_ic_12m": 0.02275343358296438
+    },
+    {
+      "turnover_bucket": 3,
+      "signal": "ret_6m",
+      "rank_ic_12m": 0.03541350179148323
+    },
+    {
+      "turnover_bucket": 4,
+      "signal": "ret_1m",
+      "rank_ic_12m": 0.012799931133194829
+    },
+    {
+      "turnover_bucket": 4,
+      "signal": "ret_6m",
+      "rank_ic_12m": 0.023175852163817658
+    },
+    {
+      "turnover_bucket": 5,
+      "signal": "ret_1m",
+      "rank_ic_12m": 0.0009905030118915296
+    },
+    {
+      "turnover_bucket": 5,
+      "signal": "ret_6m",
+      "rank_ic_12m": 0.01719358993734863
+    }
+  ],
+  "failure_aware_long_only": {
+    "momentum_only": {
+      "cagr": -0.13606574558115025,
+      "annual_vol": 0.35420927911359457,
+      "mdd": -0.9860084010650647,
+      "months": 281
+    },
+    "failure_aware_long_only": {
+      "cagr": -0.030443305900914264,
+      "annual_vol": 0.3216360446246063,
+      "mdd": -0.8535852788108601,
+      "months": 281
+    },
+    "definition": "Each month, choose the top 60 by 6-month momentum; retain the 30 with historically smaller losses in the worst 20% market months and lower trailing volatility."
+  },
+  "warnings": [
+    "Turnover is not popularity or attention; no causal interpretation is permitted.",
+    "This portfolio uses monthly close data, equal weights and no trading costs.",
+    "The 5% ADV rule is a sensitivity assumption, not observed execution."
+  ]
+}

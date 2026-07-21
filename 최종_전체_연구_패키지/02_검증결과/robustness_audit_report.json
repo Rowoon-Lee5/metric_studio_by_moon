@@ -1,0 +1,79 @@
+{
+  "topology_time_split": {
+    "split": {
+      "train_end": "2013-12-31",
+      "test_start": "2014-01-01"
+    },
+    "chosen_on_train": "small_cap|p0.9|n50|a100000000|c0.5",
+    "train_t": 3.4803253263178338,
+    "test_months": 149,
+    "test_t": 5.531741789857572,
+    "test_cagr": 0.4392024069180791
+  },
+  "topology_rolling_walk_forward": {
+    "test_years": 19,
+    "months": 221,
+    "cagr": 0.30396710670751736,
+    "t_stat": 4.735148466250198,
+    "unique_selected_strategies": 1
+  },
+  "news_dependence_audit": {
+    "months": 192,
+    "high_minus_low_mean_rank_ic": 0.0023530090589164096,
+    "moving_block_bootstrap": {
+      "block_months": 12,
+      "replications": 5000,
+      "ci_95": [
+        -0.04074203320423003,
+        0.046001344774814344
+      ],
+      "two_sided_sign_p": 0.9136
+    }
+  },
+  "consensus_benchmark": {
+    "benchmark_summary": [
+      {
+        "portfolio": "model_consensus_top30",
+        "months": 309,
+        "cagr": -0.1292496598552162,
+        "mean_monthly_return": -0.005463054318079412
+      },
+      {
+        "portfolio": "mean_of_48_components",
+        "months": 309,
+        "cagr": 0.05775734852390246,
+        "mean_monthly_return": 0.007778032025339328
+      }
+    ],
+    "monthly_return_correlation": 0.8946759178856656
+  },
+  "failure_time_split": {
+    "train": {
+      "months": 161,
+      "state_return_correlation": -0.49473306980603166,
+      "mean_successive_state_difference": -0.06586327239773503,
+      "bootstrap_ci_of_successive_difference": [
+        -0.1161998858080168,
+        -0.035347252915457386
+      ]
+    },
+    "test": {
+      "months": 148,
+      "state_return_correlation": -0.5555300815561175,
+      "mean_successive_state_difference": -0.03732169338668609,
+      "bootstrap_ci_of_successive_difference": [
+        -0.07407820281268061,
+        -0.01631406056993825
+      ]
+    }
+  },
+  "coverage_audit": {
+    "tickers": 3717,
+    "global_last_observation": "2026-05-04",
+    "tickers_ending_before_global_end": 1087,
+    "supplied_delisted_tickers": 1336,
+    "delisted_tickers_present_in_raw_adjusted_price": 1336,
+    "delisted_tickers_present_in_monthly_panel": 1087,
+    "note": "Early terminal observations are a coverage flag, not a delisting label. The supplied delisted-stock universe is directly present in the raw adjusted-price universe."
+  }
+}
