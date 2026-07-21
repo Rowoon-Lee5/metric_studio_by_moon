@@ -1,3 +1,4 @@
 results/monthly_price_adv_panel.pkl
 results/monthly_mcap_panel.pkl
 __pycache__/
+external_data/
