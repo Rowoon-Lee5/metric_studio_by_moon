@@ -116,7 +116,7 @@ def style_document(doc):
     set_font(run, 8.5, color=(100, 100, 100))
 
 
-def add_cover(doc):
+def add_cover(doc, subtitle_text="2장 시장관찰 | ②~④\n관심, 합의, 실패 공분산", description="책의 문장을 요약하지 않고, 실제 한국 주식 데이터로\n가설의 측정 방식과 실패 조건을 검증한 연구 기록"):
     for _ in range(5):
         doc.add_paragraph()
     kicker = doc.add_paragraph()
@@ -128,14 +128,14 @@ def add_cover(doc):
     title.paragraph_format.space_after = Pt(8)
     r = title.add_run("문병로 교수의 메트릭 스튜디오 02")
     set_font(r, 25, bold=True, color=(11, 37, 69))
-    subtitle = doc.add_paragraph()
-    subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    subtitle.paragraph_format.space_after = Pt(26)
-    r = subtitle.add_run("2장 시장관찰 | ②~④\n관심, 합의, 실패 공분산")
+    subtitle_para = doc.add_paragraph()
+    subtitle_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    subtitle_para.paragraph_format.space_after = Pt(26)
+    r = subtitle_para.add_run(subtitle_text)
     set_font(r, 15, color=(43, 81, 99))
     note = doc.add_paragraph()
     note.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r = note.add_run("책의 문장을 요약하지 않고, 실제 한국 주식 데이터로\n가설의 측정 방식과 실패 조건을 검증한 연구 기록")
+    r = note.add_run(description)
     set_font(r, 11, italic=True, color=(80, 80, 80))
     doc.add_page_break()
 
@@ -269,15 +269,19 @@ def add_article(doc, draft_name):
             continue
         elif line == "### 재현 자료":
             source_lines = []
+            disclaimer = None
             i += 1
             while i < len(chunks):
                 candidate = chunks[i].strip()
                 if candidate.startswith("- ["):
                     source_lines.append(candidate)
                 elif candidate.startswith("이 글은 투자 권유"):
+                    disclaimer = candidate
                     break
                 i += 1
             add_sources(doc, source_lines)
+            if disclaimer:
+                add_markdown_paragraph(doc, disclaimer)
             continue
         else:
             add_markdown_paragraph(doc, line)
