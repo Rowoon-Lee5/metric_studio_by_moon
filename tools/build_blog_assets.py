@@ -11,6 +11,7 @@ from __future__ import annotations
 import csv
 import html
 import json
+import textwrap
 from collections import defaultdict
 from pathlib import Path
 
@@ -27,10 +28,10 @@ COLORS = {
     "small_cap": "#E76F51",
 }
 LABELS = {
-    "reversal_1m": "1M reversal",
-    "momentum_6m": "6M momentum",
-    "low_volatility": "Low volatility",
-    "small_cap": "Small cap",
+    "reversal_1m": "1개월 반전",
+    "momentum_6m": "6개월 모멘텀",
+    "low_volatility": "저변동성",
+    "small_cap": "소형주",
 }
 SIGNALS = list(LABELS)
 PCTS = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
@@ -43,13 +44,32 @@ def save_svg(name: str, content: str) -> None:
 
 
 def font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
-    name = "arialbd.ttf" if bold else "arial.ttf"
+    name = "malgunbd.ttf" if bold else "malgun.ttf"
     return ImageFont.truetype(Path("C:/Windows/Fonts") / name, size)
 
 
 def save_png(image: Image.Image, name: str) -> None:
     ASSETS.mkdir(exist_ok=True)
     image.save(ASSETS / name, format="PNG", optimize=True)
+
+
+def book_excerpt_card(name: str, theme: str, quote: str, question: str) -> None:
+    """Render a short verbatim excerpt supplied in the local chapter-2 note."""
+    image = Image.new("RGB", (1200, 520), "white")
+    draw = ImageDraw.Draw(image)
+    draw.rectangle((0, 0, 18, 520), fill="#247BA0")
+    draw.text((70, 55), "문병로 교수의 메트릭 스튜디오 · 2장 시장관찰", fill="#6B7280", font=font(18, True))
+    draw.text((70, 98), theme, fill="#1F2937", font=font(30, True))
+    y = 178
+    for line in textwrap.wrap(quote, width=31):
+        excerpt_line = f"“{line}" if y == 178 else line
+        draw.text((100, y), excerpt_line, fill="#1F2937", font=font(27, True))
+        y += 48
+    draw.line((70, 365, 1130, 365), fill="#D1D5DB", width=2)
+    draw.text((70, 400), "이 문장에서 출발한 내 질문", fill="#E76F51", font=font(18, True))
+    for index, line in enumerate(textwrap.wrap(question, width=52)):
+        draw.text((70, 435 + index * 33), line, fill="#374151", font=font(18))
+    save_png(image, name)
 
 
 def topology_map(rows: list[dict[str, str]]) -> None:
@@ -64,8 +84,8 @@ def topology_map(rows: list[dict[str, str]]) -> None:
         '<desc id="desc">Four panels show how many strategy configurations remain robust at each liquidity universe and cost multiplier. Only low volatility and small cap retain robust configurations.</desc>',
         '<rect width="1200" height="720" fill="#FFFFFF"/>',
         '<style>text{font-family:Arial,sans-serif;fill:#1F2937}.muted{fill:#6B7280}.small{font-size:14px}.axis{font-size:13px}.title{font-size:25px;font-weight:700}.panel{font-size:18px;font-weight:700}.note{font-size:15px}</style>',
-        '<text x="60" y="52" class="title">Robust strategies are regions, not isolated peaks</text>',
-        '<text x="60" y="78" class="muted small">Count of configurations meeting all four rules: positive net CAGR, t &gt; 1.96, MDD &gt; -60%, mean fill ≥ 80%</text>',
+        '<text x="60" y="52" class="title">견고한 전략은 고립된 봉우리가 아니라 생존 영역이다</text>',
+        '<text x="60" y="78" class="muted small">양의 비용 차감 CAGR · t &gt; 1.96 · MDD &gt; -60% · 평균 체결률 ≥ 80%를 모두 충족한 조합 수</text>',
     ]
     panel_positions = [(60, 130), (630, 130), (60, 410), (630, 410)]
     cell_w, cell_h = 48, 35
@@ -74,7 +94,7 @@ def topology_map(rows: list[dict[str, str]]) -> None:
         for col, pct in enumerate(PCTS):
             x = x0 + 72 + col * cell_w
             svg.append(f'<text x="{x + 16}" y="{y0 - 3}" text-anchor="middle" class="axis muted">{int(pct * 100)}</text>')
-        svg.append(f'<text x="{x0 + 264}" y="{y0 - 28}" text-anchor="middle" class="axis muted">liquidity universe (%)</text>')
+        svg.append(f'<text x="{x0 + 264}" y="{y0 - 28}" text-anchor="middle" class="axis muted">유동성 유니버스 (%)</text>')
         for row_i, cost in enumerate(COSTS):
             y = y0 + row_i * cell_h
             svg.append(f'<text x="{x0 + 60}" y="{y + 23}" text-anchor="end" class="axis muted">{cost:.1f}×</text>')
@@ -86,27 +106,27 @@ def topology_map(rows: list[dict[str, str]]) -> None:
                 svg.append(f'<rect x="{x}" y="{y}" width="42" height="29" rx="3" fill="{color}" opacity="{opacity:.2f}"/>')
                 if count:
                     svg.append(f'<text x="{x + 21}" y="{y + 20}" text-anchor="middle" class="small" fill="#FFFFFF" style="fill:#FFFFFF">{count}</text>')
-        svg.append(f'<text x="{x0 + 8}" y="{y0 + 78}" transform="rotate(-90 {x0 + 8} {y0 + 78})" class="axis muted">cost multiplier</text>')
+        svg.append(f'<text x="{x0 + 8}" y="{y0 + 78}" transform="rotate(-90 {x0 + 8} {y0 + 78})" class="axis muted">비용 배수</text>')
     svg.extend([
         '<line x1="60" y1="662" x2="1140" y2="662" stroke="#D1D5DB"/>',
-        '<text x="60" y="692" class="note">Reading rule: one number is the count of robust configurations after changing holdings and AUM. Blank cells have no surviving configuration.</text>',
+        '<text x="60" y="692" class="note">읽는 법: 숫자는 보유 종목 수와 운용 규모를 바꾼 뒤에도 남은 견고 전략의 수다. 빈칸은 생존 전략이 없다는 뜻이다.</text>',
         '</svg>',
     ])
     save_svg("01_robustness_map.svg", "".join(svg))
 
     image = Image.new("RGB", (1200, 720), "white")
     draw = ImageDraw.Draw(image)
-    draw.text((60, 32), "Robust strategies are regions, not isolated peaks", fill="#1F2937", font=font(25, True))
-    draw.text((60, 63), "Count of configurations meeting all four rules: positive net CAGR, t > 1.96, MDD > -60%, mean fill >= 80%", fill="#6B7280", font=font(14))
+    draw.text((60, 32), "견고한 전략은 고립된 봉우리가 아니라 생존 영역이다", fill="#1F2937", font=font(25, True))
+    draw.text((60, 63), "양의 비용 차감 CAGR · t > 1.96 · MDD > -60% · 평균 체결률 >= 80%를 모두 충족한 조합 수", fill="#6B7280", font=font(14))
     for signal, (x0, y0) in zip(SIGNALS, panel_positions):
         draw.text((x0, y0 - 21), LABELS[signal], fill="#1F2937", font=font(18, True))
-        draw.text((x0 + 165, y0 - 39), "liquidity universe (%)", fill="#6B7280", font=font(13))
+        draw.text((x0 + 165, y0 - 39), "유동성 유니버스 (%)", fill="#6B7280", font=font(13))
         for col, pct in enumerate(PCTS):
             x = x0 + 72 + col * cell_w
             draw.text((x + 13, y0 - 4), str(int(pct * 100)), fill="#6B7280", font=font(12))
         for row_i, cost in enumerate(COSTS):
             y = y0 + row_i * cell_h
-            draw.text((x0 + 31, y + 8), f"{cost:.1f}x", fill="#6B7280", font=font(12))
+            draw.text((x0 + 31, y + 8), f"{cost:.1f}배", fill="#6B7280", font=font(12))
             for col, pct in enumerate(PCTS):
                 x = x0 + 72 + col * cell_w
                 count = counts[(signal, pct, cost)]
@@ -114,9 +134,9 @@ def topology_map(rows: list[dict[str, str]]) -> None:
                 draw.rounded_rectangle((x, y, x + 42, y + 29), radius=3, fill=color)
                 if count:
                     draw.text((x + 17, y + 6), str(count), fill="white", font=font(13, True))
-        draw.text((x0, y0 + 151), "cost multiplier", fill="#6B7280", font=font(13))
+        draw.text((x0, y0 + 151), "비용 배수", fill="#6B7280", font=font(13))
     draw.line((60, 662, 1140, 662), fill="#D1D5DB", width=1)
-    draw.text((60, 681), "Reading rule: one number is the count of robust configurations after changing holdings and AUM. Blank cells have no surviving configuration.", fill="#374151", font=font(14))
+    draw.text((60, 681), "읽는 법: 숫자는 보유 종목 수와 운용 규모를 바꾼 뒤에도 남은 견고 전략의 수다. 빈칸은 생존 전략이 없다는 뜻이다.", fill="#374151", font=font(14))
     save_png(image, "01_robustness_map.png")
 
 
@@ -131,10 +151,10 @@ def evidence_summary() -> None:
         '<desc id="desc">The figure summarises the two connected robust regions and shows that the strongest small-cap result passed a family-wise bootstrap check but remains unsuitable as an investment conclusion because delisting bias is not yet audited.</desc>',
         '<rect width="1200" height="560" fill="#FFFFFF"/>',
         '<style>text{font-family:Arial,sans-serif;fill:#1F2937}.muted{fill:#6B7280}.title{font-size:25px;font-weight:700}.sub{font-size:15px}.label{font-size:18px;font-weight:700}.value{font-size:26px;font-weight:700}.small{font-size:14px}.box{stroke:#D1D5DB;stroke-width:1.5}</style>',
-        '<text x="60" y="52" class="title">What the experiment establishes — and what it does not</text>',
-        '<text x="60" y="78" class="muted sub">KRX adjusted-price, volume and market-cap panel · 1,728 tested configurations · 309 monthly observations</text>',
+        '<text x="60" y="52" class="title">이 실험이 말하는 것과 말하지 않는 것</text>',
+        '<text x="60" y="78" class="muted sub">KRX 수정주가·거래량·시가총액 패널 · 1,728개 조합 · 월별 309개 관측치</text>',
         '<rect x="60" y="115" width="510" height="185" rx="8" fill="#F8FAFC" class="box"/>',
-        '<text x="88" y="151" class="label">Connected robust regions</text>',
+        '<text x="88" y="151" class="label">연결된 견고 전략 영역</text>',
     ]
     y = 190
     for row in continents:
@@ -146,30 +166,30 @@ def evidence_summary() -> None:
             f'<text x="88" y="{y}" class="small">{html.escape(LABELS[signal])}</text>',
             f'<rect x="220" y="{y - 15}" width="260" height="20" rx="3" fill="#E5E7EB"/>',
             f'<rect x="220" y="{y - 15}" width="{width:.1f}" height="20" rx="3" fill="{color}"/>',
-            f'<text x="495" y="{y}" class="small">{nodes} nodes</text>',
+            f'<text x="495" y="{y}" class="small">{nodes}개 조합</text>',
         ])
         y += 52
     svg.extend([
         '<rect x="630" y="115" width="510" height="185" rx="8" fill="#F8FAFC" class="box"/>',
-        '<text x="658" y="151" class="label">Best tested node</text>',
-        f'<text x="658" y="192" class="value">t = {best["t_stat"]:.2f} · family-wise p = {report["family_wise_p_value"]:.3f}</text>',
-        f'<text x="658" y="224" class="small">Small cap · liquidity top 90% · 50 holdings · KRW 100m · 0.5× cost</text>',
-        f'<text x="658" y="254" class="small">Net CAGR {best["net_cagr"] * 100:.1f}% · MDD {best["mdd"] * 100:.1f}% · mean fill {best["mean_fill"] * 100:.1f}%</text>',
+        '<text x="658" y="151" class="label">가장 강한 검정 통과 조합</text>',
+        f'<text x="658" y="192" class="value">t = {best["t_stat"]:.2f} · 가족단위 p = {report["family_wise_p_value"]:.3f}</text>',
+        f'<text x="658" y="224" class="small">소형주 · 유동성 상위 90% · 50종목 · 1억 원 · 비용 0.5배</text>',
+        f'<text x="658" y="254" class="small">비용 차감 CAGR {best["net_cagr"] * 100:.1f}% · MDD {best["mdd"] * 100:.1f}% · 평균 체결률 {best["mean_fill"] * 100:.1f}%</text>',
         '<rect x="60" y="342" width="1080" height="145" rx="8" fill="#FFF7ED" stroke="#FB923C" stroke-width="1.5"/>',
-        '<text x="88" y="380" class="label">Decision boundary</text>',
-        '<text x="88" y="412" class="small">The bootstrap result rejects a simple “best result from many trials” explanation. It does not remove survivorship or delisting bias.</text>',
-        '<text x="88" y="442" class="small">Therefore this is a strong hypothesis for the next audit, not an investable small-cap strategy.</text>',
-        '<text x="60" y="528" class="muted small">Source: results/alpha_topology_nodes.csv, results/alpha_topology_continents.csv, results/reality_check_report.json</text>',
+        '<text x="88" y="380" class="label">결론의 경계</text>',
+        '<text x="88" y="412" class="small">부트스트랩은 ‘많이 돌려 우연히 최고 결과를 찾았다’는 설명을 기각한다. 생존편향과 상장폐지 편향은 제거하지 못한다.</text>',
+        '<text x="88" y="442" class="small">따라서 이는 다음 감사 단계의 강한 가설일 뿐, 투자 가능한 소형주 전략이 아니다.</text>',
+        '<text x="60" y="528" class="muted small">출처: alpha_topology_nodes.csv · alpha_topology_continents.csv · reality_check_report.json</text>',
         '</svg>',
     ])
     save_svg("02_evidence_decision_boundary.svg", "".join(svg))
 
     image = Image.new("RGB", (1200, 560), "white")
     draw = ImageDraw.Draw(image)
-    draw.text((60, 32), "What the experiment establishes — and what it does not", fill="#1F2937", font=font(25, True))
-    draw.text((60, 63), "KRX adjusted-price, volume and market-cap panel · 1,728 tested configurations · 309 monthly observations", fill="#6B7280", font=font(15))
+    draw.text((60, 32), "이 실험이 말하는 것과 말하지 않는 것", fill="#1F2937", font=font(25, True))
+    draw.text((60, 63), "KRX 수정주가·거래량·시가총액 패널 · 1,728개 조합 · 월별 309개 관측치", fill="#6B7280", font=font(15))
     draw.rounded_rectangle((60, 115, 570, 300), radius=8, fill="#F8FAFC", outline="#D1D5DB", width=2)
-    draw.text((88, 137), "Connected robust regions", fill="#1F2937", font=font(18, True))
+    draw.text((88, 137), "연결된 견고 전략 영역", fill="#1F2937", font=font(18, True))
     y = 181
     for row in continents:
         signal = row["signals"]
@@ -178,30 +198,30 @@ def evidence_summary() -> None:
         draw.text((88, y), LABELS[signal], fill="#1F2937", font=font(14))
         draw.rounded_rectangle((220, y - 2, 480, y + 18), radius=3, fill="#E5E7EB")
         draw.rounded_rectangle((220, y - 2, 220 + width, y + 18), radius=3, fill=COLORS[signal])
-        draw.text((495, y), f"{nodes} nodes", fill="#1F2937", font=font(14))
+        draw.text((495, y), f"{nodes}개 조합", fill="#1F2937", font=font(14))
         y += 52
     draw.rounded_rectangle((630, 115, 1140, 300), radius=8, fill="#F8FAFC", outline="#D1D5DB", width=2)
-    draw.text((658, 137), "Best tested node", fill="#1F2937", font=font(18, True))
-    draw.text((658, 178), f"t = {best['t_stat']:.2f} · family-wise p = {report['family_wise_p_value']:.3f}", fill="#1F2937", font=font(24, True))
-    draw.text((658, 216), "Small cap · liquidity top 90% · 50 holdings · KRW 100m · 0.5x cost", fill="#1F2937", font=font(14))
-    draw.text((658, 247), f"Net CAGR {best['net_cagr'] * 100:.1f}% · MDD {best['mdd'] * 100:.1f}% · mean fill {best['mean_fill'] * 100:.1f}%", fill="#1F2937", font=font(14))
+    draw.text((658, 137), "가장 강한 검정 통과 조합", fill="#1F2937", font=font(18, True))
+    draw.text((658, 178), f"t = {best['t_stat']:.2f} · 가족단위 p = {report['family_wise_p_value']:.3f}", fill="#1F2937", font=font(24, True))
+    draw.text((658, 216), "소형주 · 유동성 상위 90% · 50종목 · 1억 원 · 비용 0.5배", fill="#1F2937", font=font(14))
+    draw.text((658, 247), f"비용 차감 CAGR {best['net_cagr'] * 100:.1f}% · MDD {best['mdd'] * 100:.1f}% · 평균 체결률 {best['mean_fill'] * 100:.1f}%", fill="#1F2937", font=font(14))
     draw.rounded_rectangle((60, 342, 1140, 487), radius=8, fill="#FFF7ED", outline="#FB923C", width=2)
-    draw.text((88, 364), "Decision boundary", fill="#1F2937", font=font(18, True))
-    draw.text((88, 402), "The bootstrap result rejects a simple “best result from many trials” explanation. It does not remove survivorship or delisting bias.", fill="#1F2937", font=font(14))
-    draw.text((88, 434), "Therefore this is a strong hypothesis for the next audit, not an investable small-cap strategy.", fill="#1F2937", font=font(14))
-    draw.text((60, 518), "Source: alpha_topology_nodes.csv · alpha_topology_continents.csv · reality_check_report.json", fill="#6B7280", font=font(14))
+    draw.text((88, 364), "결론의 경계", fill="#1F2937", font=font(18, True))
+    draw.text((88, 402), "부트스트랩은 ‘많이 돌려 우연히 최고 결과를 찾았다’는 설명을 기각한다. 생존편향과 상장폐지 편향은 제거하지 못한다.", fill="#1F2937", font=font(14))
+    draw.text((88, 434), "따라서 이는 다음 감사 단계의 강한 가설일 뿐, 투자 가능한 소형주 전략이 아니다.", fill="#1F2937", font=font(14))
+    draw.text((60, 518), "출처: alpha_topology_nodes.csv · alpha_topology_continents.csv · reality_check_report.json", fill="#6B7280", font=font(14))
     save_png(image, "02_evidence_decision_boundary.png")
 
 
 def news_attention_chart() -> None:
     report = json.loads((RESULTS / "news_attention_report.json").read_text(encoding="utf-8"))
     rows = report["attention_bucket_momentum_predictability"]
-    labels = ["Low news", "Middle", "High news"]
+    labels = ["뉴스량 하위", "중간", "뉴스량 상위"]
     values = [row["mean_rank_ic_12m"] for row in rows]
     image = Image.new("RGB", (1200, 620), "white")
     draw = ImageDraw.Draw(image)
-    draw.text((60, 32), "Observed news volume does not support the turnover proxy story", fill="#1F2937", font=font(25, True))
-    draw.text((60, 63), "Mean 12-month Rank IC of 6-month momentum by observed-news tertile", fill="#6B7280", font=font(15))
+    draw.text((60, 32), "실제 뉴스량은 거래회전율 대리변수 해석을 지지하지 않았다", fill="#1F2937", font=font(25, True))
+    draw.text((60, 63), "관측 뉴스량 3분위별 6개월 모멘텀의 평균 12개월 Rank IC", fill="#6B7280", font=font(15))
     x0, y_base, scale = 165, 480, 3400
     draw.line((130, y_base, 1130, y_base), fill="#9CA3AF", width=2)
     for tick in [0.00, 0.04, 0.08]:
@@ -215,8 +235,8 @@ def news_attention_chart() -> None:
         draw.rounded_rectangle((x, y_base - height, x + 150, y_base), radius=5, fill=color)
         draw.text((x + 24, y_base - height - 34), f"IC {value:.3f}", fill="#1F2937", font=font(18, True))
         draw.text((x + 22, y_base + 20), label, fill="#1F2937", font=font(15, True))
-        draw.text((x + 13, y_base + 47), f"192 months · mean n {row['mean_n']:.1f}", fill="#6B7280", font=font(13))
-    draw.text((60, 565), "Sample: 70 stocks, 8,399 stock-month observations, Jun 2000–Apr 2025. Higher news volume coincided with higher—not lower—momentum IC.", fill="#374151", font=font(14))
+        draw.text((x + 13, y_base + 47), f"192개월 · 월평균 {row['mean_n']:.1f}종목", fill="#6B7280", font=font(13))
+    draw.text((60, 565), "표본: 70종목, 8,399개 종목-월 관측치, 2000.06~2025.04. 뉴스량이 많을수록 모멘텀 IC는 낮지 않고 오히려 높았다.", fill="#374151", font=font(14))
     save_png(image, "03_observed_news_attention.png")
 
 
@@ -230,8 +250,8 @@ def consensus_cumulative_chart() -> None:
             values.append(wealth)
     image = Image.new("RGB", (1200, 620), "white")
     draw = ImageDraw.Draw(image)
-    draw.text((60, 32), "Model agreement did not create a safer portfolio", fill="#1F2937", font=font(25, True))
-    draw.text((60, 63), "KRW 100 indexed wealth of the top-30 portfolio selected by the most model votes", fill="#6B7280", font=font(15))
+    draw.text((60, 32), "모델 합의는 더 안전한 포트폴리오를 만들지 못했다", fill="#1F2937", font=font(25, True))
+    draw.text((60, 63), "가장 많은 모델 표를 받은 상위 30종목 포트폴리오의 100원 기준 누적자산", fill="#6B7280", font=font(15))
     left, top, right, bottom = 100, 130, 1130, 490
     draw.line((left, bottom, right, bottom), fill="#9CA3AF", width=2)
     draw.line((left, top, left, bottom), fill="#9CA3AF", width=2)
@@ -249,7 +269,7 @@ def consensus_cumulative_chart() -> None:
         draw.line(points, fill="#E76F51", width=3)
     draw.text((100, 510), "2000", fill="#6B7280", font=font(13))
     draw.text((1040, 510), "2026", fill="#6B7280", font=font(13))
-    draw.text((60, 565), f"318 monthly observations · final indexed wealth {values[-1]:.1f} · CAGR -12.9%. A vote count is not independent evidence when every model begins with the same price-volume-cap data.", fill="#374151", font=font(14))
+    draw.text((60, 565), f"월별 318개 관측치 · 최종 누적자산 {values[-1]:.1f} · CAGR -12.9%. 같은 가격·거래량·시총 데이터에서 나온 표 수는 독립적 증거가 아니다.", fill="#374151", font=font(14))
     save_png(image, "04_model_consensus_cumulative.png")
 
 
@@ -257,8 +277,8 @@ def failure_coherence_chart() -> None:
     rows = list(csv.DictReader((RESULTS / "model_failure_state_summary.csv").open(encoding="utf-8-sig")))
     image = Image.new("RGB", (1200, 650), "white")
     draw = ImageDraw.Draw(image)
-    draw.text((60, 32), "The next-month market return worsened as more signals failed together", fill="#1F2937", font=font(25, True))
-    draw.text((60, 63), "Mean next-month equal-weight market return after 0–4 factor-model failures", fill="#6B7280", font=font(15))
+    draw.text((60, 32), "동시에 실패한 신호가 많을수록 다음 달 시장수익률은 나빠졌다", fill="#1F2937", font=font(25, True))
+    draw.text((60, 63), "0~4개 팩터 모델 실패 상태 뒤의 다음 달 동일가중 시장 평균수익률", fill="#6B7280", font=font(15))
     center_y, x0, bar_w, step, scale = 320, 190, 130, 190, 1200
     draw.line((120, center_y, 1130, center_y), fill="#6B7280", width=2)
     draw.text((72, center_y - 10), "0%", fill="#6B7280", font=font(13))
@@ -271,9 +291,9 @@ def failure_coherence_chart() -> None:
         draw.rounded_rectangle(coords, radius=5, fill=color)
         label_y = center_y - h - 32 if mean >= 0 else center_y + h + 7
         draw.text((x + 25, label_y), f"{mean * 100:.1f}%", fill="#1F2937", font=font(18, True))
-        draw.text((x + 20, 535), f"{row['failure_coherence']} failures", fill="#1F2937", font=font(14, True))
+        draw.text((x + 20, 535), f"{row['failure_coherence']}개 실패", fill="#1F2937", font=font(14, True))
         draw.text((x + 42, 560), f"n = {row['size']}", fill="#6B7280", font=font(13))
-    draw.text((60, 605), "The pattern is hypothesis-generating only: states with 3 or 4 failures have n = 2 and n = 5 respectively, far too small for a trading rule.", fill="#374151", font=font(14))
+    draw.text((60, 605), "이 패턴은 가설 생성용이다. 3개·4개 실패 상태는 각각 n=2, n=5로 매매 규칙을 만들기에는 표본이 너무 작다.", fill="#374151", font=font(14))
     save_png(image, "05_model_failure_coherence.png")
 
 
@@ -285,6 +305,30 @@ def main() -> None:
     news_attention_chart()
     consensus_cumulative_chart()
     failure_coherence_chart()
+    book_excerpt_card(
+        "09_book_excerpt_liquidity.png",
+        "유동성이 미치는 영향",
+        "유동성 제한이 수익률에 미치는 영향은 포트폴리오와 그 운영 전략에 따라 다르므로 불변의 법칙은 없다.",
+        "유동성 상위 80%는 누구에게 최적인가?",
+    )
+    book_excerpt_card(
+        "06_book_excerpt_popularity.png",
+        "인기주와 비인기주의 예후",
+        "다른 특별한 이유 없이 인기가 있다는 것만으로 종목을 선택하는 것은 확률적으로 틀린 것이라는 것을 알 수 있다.",
+        "거래회전율은 정말 투자자의 관심을 측정하는가?",
+    )
+    book_excerpt_card(
+        "07_book_excerpt_strategy.png",
+        "패턴과 운용 전략의 검증",
+        "계량 투자의 관점에서는 이들 중 어떤 것도 수치로 검증된 결과가 없다면 받아들여서는 안 된다.",
+        "여러 모델이 동시에 고른 종목은 독립된 증거를 얻은 것인가?",
+    )
+    book_excerpt_card(
+        "08_book_excerpt_mixed_results.png",
+        "상반된 시장 관찰",
+        "같은 시기를 놓고도 이렇게 상반된 결과가 나온다.",
+        "시장의 상태를 가격 방향이 아니라 모델의 동시 실패로 볼 수 있는가?",
+    )
 
 
 if __name__ == "__main__":
