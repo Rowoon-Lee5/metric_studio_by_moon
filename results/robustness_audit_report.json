@@ -5,16 +5,16 @@
       "test_start": "2014-01-01"
     },
     "chosen_on_train": "small_cap|p0.9|n50|a100000000|c0.5",
-    "train_t": 3.7566545373552263,
-    "test_months": 148,
-    "test_t": 5.5548366896586066,
-    "test_cagr": 0.4520188166953425
+    "train_t": 3.725697981176739,
+    "test_months": 149,
+    "test_t": 5.539902934475774,
+    "test_cagr": 0.4392513986612554
   },
   "topology_rolling_walk_forward": {
     "test_years": 19,
-    "months": 220,
-    "cagr": 0.317949169806248,
-    "t_stat": 4.806740751684887,
+    "months": 221,
+    "cagr": 0.3041109541642584,
+    "t_stat": 4.740495519342878,
     "unique_selected_strategies": 1
   },
   "news_dependence_audit": {

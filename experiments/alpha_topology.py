@@ -45,14 +45,19 @@ def main():
     specs={'reversal_1m':('r1',True),'momentum_6m':('r6',False),'low_volatility':('vol12',True),'small_cap':('mcap',True)}
     paths={}; rows=[]
     for date,d in x.groupby('date'):
-        d=d.dropna(subset=['next','adv_21d','r1','r6','vol12','mcap']); d=d[(d.adv_21d>0)&(d.price>0)&(d.mcap>0)]
+        # Selection may use only information known at the formation close.  A
+        # missing next-month price is therefore never used to exclude a stock.
+        # For the unresolved final endpoint, the base run assigns a zero return
+        # (cash at the last observed adjusted price); endpoint-loss sensitivity
+        # is reported separately in closure_audits.py.
+        d=d.dropna(subset=['adv_21d','r1','r6','vol12','mcap']); d=d[(d.adv_21d>0)&(d.price>0)&(d.mcap>0)]
         for signal,(col,ascending) in specs.items():
             for p in PCTS:
                 u=d.nlargest(max(max(NS),int(len(d)*p)),'adv_21d')
                 for n in NS:
                     selected=u.sort_values(col,ascending=ascending).head(n)
                     if len(selected)<n: continue
-                    adv=selected.adv_21d.to_numpy(); ret=selected.next.to_numpy()
+                    adv=selected.adv_21d.to_numpy(); ret=selected.next.fillna(0.0).to_numpy()
                     for aum in AUMS:
                         filled=np.minimum(aum/n,PARTICIPATION*adv); fill=filled.sum()/aum; ratio=np.divide(filled,adv,out=np.zeros(n),where=adv>0)
                         for cost in COSTS:

@@ -37,14 +37,14 @@
     ]
   },
   "nodes_total": 1728,
-  "robust_nodes": 68,
+  "robust_nodes": 67,
   "continents": [
     {
       "continent_id": 1,
-      "nodes": 56,
+      "nodes": 55,
       "signals": "low_volatility",
-      "mean_net_cagr": 0.06619590433619775,
-      "min_net_cagr": 0.046847743971045075,
+      "mean_net_cagr": 0.06535322198933986,
+      "min_net_cagr": 0.044122380978622866,
       "max_cost_multiplier": 2.0,
       "aum_range": "100000000-1000000000"
     },
@@ -52,8 +52,8 @@
       "continent_id": 2,
       "nodes": 12,
       "signals": "small_cap",
-      "mean_net_cagr": 0.349652634154028,
-      "min_net_cagr": 0.24940034868735417,
+      "mean_net_cagr": 0.3423571043265265,
+      "min_net_cagr": 0.24507885931861706,
       "max_cost_multiplier": 2.0,
       "aum_range": "100000000-1000000000"
     }

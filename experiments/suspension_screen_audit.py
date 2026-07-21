@@ -70,7 +70,9 @@ def main() -> None:
     x["suspended"] = x.suspended.fillna(False).astype(bool)
     rows = []
     for date, day in x.groupby("date"):
-        day = day.dropna(subset=["next", "adv_21d", "mcap"])
+        # A future missing price cannot be a formation-time exclusion rule.
+        # Endpoint sensitivity is handled separately in closure_audits.py.
+        day = day.dropna(subset=["adv_21d", "mcap"])
         day = day[(day.adv_21d > 0) & (day.price > 0) & (day.mcap > 0)]
         base = day.nlargest(max(50, int(len(day) * 0.9)), "adv_21d").nsmallest(50, "mcap")
         screened = day.loc[~day.suspended].nlargest(max(50, int((~day.suspended).sum() * 0.9)), "adv_21d").nsmallest(50, "mcap")
@@ -81,7 +83,7 @@ def main() -> None:
             filled = np.minimum(aum / 50, PARTICIPATION * selected.adv_21d.to_numpy())
             ratio = np.divide(filled, selected.adv_21d.to_numpy(), out=np.zeros(50), where=selected.adv_21d.to_numpy() > 0)
             one_way = 0.001 + 0.005 * 0.5 * np.sqrt(ratio)
-            net = (filled * selected.next.to_numpy()).sum() / aum - 2 * (filled * one_way).sum() / aum
+            net = (filled * selected.next.fillna(0.0).to_numpy()).sum() / aum - 2 * (filled * one_way).sum() / aum
             rows.append({"date": date, "variant": label, "net_return": net, "holdings": len(selected), "excluded_suspended": int(day.suspended.sum())})
     returns = pd.DataFrame(rows)
     summary = returns.groupby("variant").net_return.agg(months="size", mean_return="mean", cagr=cagr, t_stat=t_stat, mdd=mdd).reset_index()

@@ -1,0 +1,43 @@
+{
+  "version": "chapter2-protocol-v1",
+  "frozen_after_results": true,
+  "future_validation_rule": "No signal, parameter, cost convention, or acceptance threshold may be changed before a new untouched evaluation window is scored.",
+  "candidate_grid": {
+    "signals": [
+      "reversal_1m",
+      "momentum_6m",
+      "low_volatility",
+      "small_cap"
+    ],
+    "liquidity_percentiles": [
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0
+    ],
+    "holdings": [
+      10,
+      20,
+      30,
+      50
+    ],
+    "aum_krw": [
+      100000000.0,
+      1000000000.0,
+      10000000000.0
+    ],
+    "cost_multipliers": [
+      0.5,
+      1.0,
+      1.5,
+      2.0
+    ]
+  },
+  "selected_candidate": "small_cap|p0.9|n50|a100000000|c0.5",
+  "acceptance": "positive net CAGR, t-stat > 1.96, MDD > -60%, mean fill >= 80%, and no failure under one-month decision lag"
+}
