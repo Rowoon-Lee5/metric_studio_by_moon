@@ -1,0 +1,56 @@
+{
+  "source": {
+    "path": "C:\\Users\\benef\\OneDrive\\바탕 화면\\책\\문병로 교수의 메트릭 스튜디오\\문병로 교수의 메트릭 스튜디오 02\\results\\news_attention_source_snapshot.csv",
+    "joined_observations": 8399,
+    "tickers": 70,
+    "start": "2000-06-30",
+    "end": "2025-04-30"
+  },
+  "attention_bucket_momentum_predictability": [
+    {
+      "bucket": 1,
+      "months": 192,
+      "mean_rank_ic_12m": 0.057394838385791486,
+      "mean_next_12m": 0.2868910232331463,
+      "mean_n": 14.9375
+    },
+    {
+      "bucket": 2,
+      "months": 192,
+      "mean_rank_ic_12m": 0.03979909660177426,
+      "mean_next_12m": 0.16991182502398441,
+      "mean_n": 14.213541666666666
+    },
+    {
+      "bucket": 3,
+      "months": 192,
+      "mean_rank_ic_12m": 0.07993653485231188,
+      "mean_next_12m": 0.26996045254356704,
+      "mean_n": 14.59375
+    }
+  ],
+  "attention_surprise_events": [
+    {
+      "attention_event": "normal",
+      "observations": 7860,
+      "mean_next_1m": 0.019275994299851714,
+      "median_next_1m": 0.006231393833754706,
+      "mean_news_sent": 0.10993621412404929
+    },
+    {
+      "attention_event": "quiet",
+      "observations": 441,
+      "mean_next_1m": 0.008490457075331807,
+      "median_next_1m": 0.002159827213822796,
+      "mean_news_sent": 0.08629065926097364
+    },
+    {
+      "attention_event": "surge",
+      "observations": 98,
+      "mean_next_1m": 0.035727216946892446,
+      "median_next_1m": 0.029719623703679976,
+      "mean_news_sent": 0.13889900097115485
+    }
+  ],
+  "interpretation": "Observed news count replaces the turnover proxy. The panel is only 72 tickers and news coverage/collection methodology may be endogenous; results are external validation, not causal proof."
+}
