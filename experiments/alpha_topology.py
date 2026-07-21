@@ -11,6 +11,7 @@ from collections import deque
 from statistics import NormalDist
 import numpy as np
 import pandas as pd
+from panel_integrity import audit_dict, quarantine_reentries, return_over_months, trailing_return
 
 ROOT=Path(__file__).resolve().parents[1]; OUT=ROOT/'results'
 PCTS=np.arange(.2,1.01,.1); NS=[10,20,30,50]; AUMS=[1e8,1e9,1e10]; COSTS=[.5,1.,1.5,2.]
@@ -40,8 +41,9 @@ def components(nodes):
 
 def main():
     x=pd.read_pickle(OUT/'monthly_price_adv_panel.pkl').sort_values(['ticker','date']).copy()
+    before=len(x); x, breaks=quarantine_reentries(x); integrity=audit_dict(breaks,before,len(x))
     mc=pd.read_pickle(OUT/'monthly_mcap_panel.pkl'); x=x.merge(mc,on=['date','ticker'],how='left')
-    x['next']=x.groupby('ticker').price.shift(-1)/x.price-1; x['r1']=x.groupby('ticker').price.pct_change(); x['r6']=x.groupby('ticker').price.pct_change(6); x['vol12']=x.groupby('ticker').r1.transform(lambda s:s.rolling(12,min_periods=8).std())
+    x['next']=return_over_months(x,1); x['r1']=trailing_return(x,1); x['r6']=trailing_return(x,6); x['vol12']=x.groupby('ticker').r1.transform(lambda s:s.rolling(12,min_periods=8).std())
     specs={'reversal_1m':('r1',True),'momentum_6m':('r6',False),'low_volatility':('vol12',True),'small_cap':('mcap',True)}
     paths={}; rows=[]
     for date,d in x.groupby('date'):
@@ -81,6 +83,6 @@ def main():
         key=node_key(*k)
         monthly.extend({'date':d,'key':key,'net_return':r} for d,r in zip(values['dates'],values['returns']))
     pd.DataFrame(monthly).to_csv(OUT/'alpha_topology_monthly_returns.csv',index=False,encoding='utf-8-sig')
-    report={'definition':'A robust node has positive net CAGR, t-stat>1.96, MDD>-60% and mean order fill>=80%. A continent is a connected component under one-step parameter perturbations.','grid':{'signals':list(specs),'universe_pct':PCTS.tolist(),'holdings':NS,'aum_krw':AUMS,'cost_multipliers':COSTS},'nodes_total':int(len(summary)),'robust_nodes':int(summary.robust.sum()),'continents':records,'warning':'This is a topology diagnostic, not a multiple-testing correction. Formal reality-check/permutation testing remains a separate gate.'}
+    report={'definition':'A robust node has positive net CAGR, t-stat>1.96, MDD>-60% and mean order fill>=80%. A continent is a connected component under one-step parameter perturbations.','grid':{'signals':list(specs),'universe_pct':PCTS.tolist(),'holdings':NS,'aum_krw':AUMS,'cost_multipliers':COSTS},'nodes_total':int(len(summary)),'robust_nodes':int(summary.robust.sum()),'continents':records,'panel_integrity':integrity,'warning':'This is a topology diagnostic, not a multiple-testing correction. Formal reality-check/permutation testing remains a separate gate.'}
     (OUT/'alpha_topology_report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8'); print(json.dumps(report,ensure_ascii=False,indent=2))
 if __name__=='__main__':main()

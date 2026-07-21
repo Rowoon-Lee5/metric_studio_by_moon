@@ -5,29 +5,29 @@
       "test_start": "2014-01-01"
     },
     "chosen_on_train": "small_cap|p0.9|n50|a100000000|c0.5",
-    "train_t": 3.725697981176739,
+    "train_t": 3.4803253263178338,
     "test_months": 149,
-    "test_t": 5.539902934475774,
-    "test_cagr": 0.4392513986612554
+    "test_t": 5.531741789857572,
+    "test_cagr": 0.4392024069180791
   },
   "topology_rolling_walk_forward": {
     "test_years": 19,
     "months": 221,
-    "cagr": 0.3041109541642584,
-    "t_stat": 4.740495519342878,
+    "cagr": 0.30396710670751736,
+    "t_stat": 4.735148466250198,
     "unique_selected_strategies": 1
   },
   "news_dependence_audit": {
     "months": 192,
-    "high_minus_low_mean_rank_ic": 0.0010320968268252041,
+    "high_minus_low_mean_rank_ic": 0.0023530090589164096,
     "moving_block_bootstrap": {
       "block_months": 12,
       "replications": 5000,
       "ci_95": [
-        -0.041389978743318644,
-        0.04397585743756875
+        -0.04074203320423003,
+        0.046001344774814344
       ],
-      "two_sided_sign_p": 0.962
+      "two_sided_sign_p": 0.9136
     }
   },
   "consensus_benchmark": {

@@ -12,6 +12,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from openpyxl import load_workbook
+from panel_integrity import quarantine_reentries, return_over_months
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,6 +59,7 @@ def read_monthly_suspensions(wanted_dates: set[pd.Timestamp], wanted_tickers: se
 
 def main() -> None:
     price = pd.read_pickle(OUT / "monthly_price_adv_panel.pkl").sort_values(["ticker", "date"]).copy()
+    price, _ = quarantine_reentries(price)
     mcap = pd.read_pickle(OUT / "monthly_mcap_panel.pkl")
     price["ticker"] = price.ticker.astype(str).str.zfill(6)
     wanted_dates = set(pd.to_datetime(price.date).dt.normalize().unique())
@@ -65,7 +67,7 @@ def main() -> None:
     suspended.to_csv(OUT / "monthly_suspension_flags.csv", index=False, encoding="utf-8-sig")
 
     x = price.merge(mcap, on=["date", "ticker"], how="left")
-    x["next"] = x.groupby("ticker").price.shift(-1) / x.price - 1
+    x["next"] = return_over_months(x, 1)
     x = x.merge(suspended.assign(suspended=True), on=["date", "ticker"], how="left")
     x["suspended"] = x.suspended.fillna(False).astype(bool)
     rows = []

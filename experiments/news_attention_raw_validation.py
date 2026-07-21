@@ -6,6 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from panel_integrity import quarantine_reentries, return_over_months, trailing_return
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,9 +35,10 @@ def block_bootstrap(series: pd.Series, rng: np.random.Generator, block: int = 12
 
 def main() -> None:
     price = pd.read_pickle(OUT / "monthly_price_adv_panel.pkl").sort_values(["ticker", "date"]).copy()
+    price, _ = quarantine_reentries(price)
     price["ticker"] = price.ticker.map(normalize)
-    price["next_12m"] = price.groupby("ticker").price.shift(-12) / price.price - 1
-    price["ret_6m"] = price.groupby("ticker").price.pct_change(6)
+    price["next_12m"] = return_over_months(price, 12)
+    price["ret_6m"] = trailing_return(price, 6)
     news = pd.read_csv(SOURCE, parse_dates=["date"])
     news["ticker"] = news.ticker.map(normalize)
     news["news_log_count"] = np.log1p(news.n_titles.clip(lower=0))

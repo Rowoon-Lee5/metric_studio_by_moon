@@ -37,14 +37,14 @@
     ]
   },
   "nodes_total": 1728,
-  "robust_nodes": 67,
+  "robust_nodes": 64,
   "continents": [
     {
       "continent_id": 1,
-      "nodes": 55,
+      "nodes": 52,
       "signals": "low_volatility",
-      "mean_net_cagr": 0.06535322198933986,
-      "min_net_cagr": 0.044122380978622866,
+      "mean_net_cagr": 0.06587119446897115,
+      "min_net_cagr": 0.050644529604970234,
       "max_cost_multiplier": 2.0,
       "aum_range": "100000000-1000000000"
     },
@@ -52,11 +52,18 @@
       "continent_id": 2,
       "nodes": 12,
       "signals": "small_cap",
-      "mean_net_cagr": 0.3423571043265265,
-      "min_net_cagr": 0.24507885931861706,
+      "mean_net_cagr": 0.3212692790307609,
+      "min_net_cagr": 0.24103425368108589,
       "max_cost_multiplier": 2.0,
       "aum_range": "100000000-1000000000"
     }
   ],
+  "panel_integrity": {
+    "max_allowed_monthly_gap_days": 40,
+    "non_contiguous_links": 21,
+    "tickers_with_non_contiguous_links": 19,
+    "rows_before_reentry_quarantine": 593279,
+    "rows_after_reentry_quarantine": 591515
+  },
   "warning": "This is a topology diagnostic, not a multiple-testing correction. Formal reality-check/permutation testing remains a separate gate."
 }

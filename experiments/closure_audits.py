@@ -14,6 +14,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from panel_integrity import audit_dict, quarantine_reentries, return_over_months, trailing_return
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,12 +45,15 @@ def mdd(values: pd.Series | np.ndarray) -> float:
 
 def prepare() -> pd.DataFrame:
     price = pd.read_pickle(OUT / "monthly_price_adv_panel.pkl").sort_values(["ticker", "date"]).copy()
+    before = len(price)
+    price, breaks = quarantine_reentries(price)
     mcap = pd.read_pickle(OUT / "monthly_mcap_panel.pkl")
     x = price.merge(mcap, on=["date", "ticker"], how="left")
-    x["next"] = x.groupby("ticker").price.shift(-1) / x.price - 1
-    x["r1"] = x.groupby("ticker").price.pct_change()
-    x["r6"] = x.groupby("ticker").price.pct_change(6)
+    x["next"] = return_over_months(x, 1)
+    x["r1"] = trailing_return(x, 1)
+    x["r6"] = trailing_return(x, 6)
     x["vol12"] = x.groupby("ticker").r1.transform(lambda s: s.rolling(12, min_periods=8).std())
+    x.attrs["panel_integrity"] = audit_dict(breaks, before, len(price))
     return x
 
 
@@ -215,6 +219,7 @@ def size_mechanism(x: pd.DataFrame) -> dict:
 def main() -> None:
     x = prepare()
     report = {
+        "panel_integrity": x.attrs["panel_integrity"],
         "execution_cost": execution_break_even(x),
         "timing_and_research_freedom": timing_and_blocks(x),
         "attention_measurement": attention_measurement(x),
