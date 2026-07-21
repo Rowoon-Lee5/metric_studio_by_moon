@@ -150,7 +150,7 @@ def evidence_summary() -> None:
     svg = [
         '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">',
         '<title id="title">Evidence summary and decision boundary</title>',
-        '<desc id="desc">The figure summarises the two connected robust regions and shows that the strongest small-cap result passed a family-wise bootstrap check but remains unsuitable as an investment conclusion because delisting bias is not yet audited.</desc>',
+        '<desc id="desc">The figure summarises the two connected robust regions and shows that the strongest small-cap result passed a family-wise bootstrap check. The supplied delisted-stock universe is included in the raw price data and trading suspensions are screened at formation.</desc>',
         '<rect width="1200" height="560" fill="#FFFFFF"/>',
         '<style>text{font-family:Arial,sans-serif;fill:#1F2937}.muted{fill:#6B7280}.title{font-size:25px;font-weight:700}.sub{font-size:15px}.label{font-size:18px;font-weight:700}.value{font-size:26px;font-weight:700}.small{font-size:14px}.box{stroke:#D1D5DB;stroke-width:1.5}</style>',
         '<text x="60" y="52" class="title">이 실험이 말하는 것과 말하지 않는 것</text>',
@@ -179,8 +179,8 @@ def evidence_summary() -> None:
         f'<text x="658" y="254" class="small">비용 차감 CAGR {best["net_cagr"] * 100:.1f}% · MDD {best["mdd"] * 100:.1f}% · 평균 체결률 {best["mean_fill"] * 100:.1f}%</text>',
         '<rect x="60" y="342" width="1080" height="145" rx="8" fill="#FFF7ED" stroke="#FB923C" stroke-width="1.5"/>',
         '<text x="88" y="380" class="label">결론의 경계</text>',
-        '<text x="88" y="412" class="small">부트스트랩은 ‘많이 돌려 우연히 최고 결과를 찾았다’는 설명을 기각한다. 생존편향과 상장폐지 편향은 제거하지 못한다.</text>',
-        '<text x="88" y="442" class="small">따라서 이는 다음 감사 단계의 강한 가설일 뿐, 투자 가능한 소형주 전략이 아니다.</text>',
+        '<text x="88" y="412" class="small">상장폐지 원본 1,336코드는 수정주가에 모두 포함됐다. 거래정지 종목은 편입 시점에 제외했다.</text>',
+        '<text x="88" y="442" class="small">부트스트랩은 ‘많이 돌려 우연히 최고 결과를 찾았다’는 설명을 기각한다. 경제적 원인은 아직 검정 대상이다.</text>',
         '<text x="60" y="528" class="muted small">출처: alpha_topology_nodes.csv · alpha_topology_continents.csv · reality_check_report.json</text>',
         '</svg>',
     ])
@@ -209,22 +209,21 @@ def evidence_summary() -> None:
     draw.text((658, 247), f"비용 차감 CAGR {best['net_cagr'] * 100:.1f}% · MDD {best['mdd'] * 100:.1f}% · 평균 체결률 {best['mean_fill'] * 100:.1f}%", fill="#1F2937", font=font(14))
     draw.rounded_rectangle((60, 342, 1140, 487), radius=8, fill="#FFF7ED", outline="#FB923C", width=2)
     draw.text((88, 364), "결론의 경계", fill="#1F2937", font=font(18, True))
-    draw.text((88, 402), "부트스트랩은 ‘많이 돌려 우연히 최고 결과를 찾았다’는 설명을 기각한다. 생존편향과 상장폐지 편향은 제거하지 못한다.", fill="#1F2937", font=font(14))
-    draw.text((88, 434), "따라서 이는 다음 감사 단계의 강한 가설일 뿐, 투자 가능한 소형주 전략이 아니다.", fill="#1F2937", font=font(14))
+    draw.text((88, 402), "상장폐지 원본 1,336코드는 수정주가에 모두 포함됐다. 거래정지 종목은 편입 시점에 제외했다.", fill="#1F2937", font=font(14))
+    draw.text((88, 434), "부트스트랩은 ‘많이 돌려 우연히 최고 결과를 찾았다’는 설명을 기각한다. 경제적 원인은 아직 검정 대상이다.", fill="#1F2937", font=font(14))
     draw.text((60, 518), "출처: alpha_topology_nodes.csv · alpha_topology_continents.csv · reality_check_report.json", fill="#6B7280", font=font(14))
     save_png(image, "02_evidence_decision_boundary.png")
 
 
 def news_attention_chart() -> None:
-    report = json.loads((RESULTS / "news_attention_report.json").read_text(encoding="utf-8"))
-    audit = json.loads((RESULTS / "robustness_audit_report.json").read_text(encoding="utf-8"))
-    rows = report["attention_bucket_momentum_predictability"]
+    report = json.loads((RESULTS / "news_attention_raw_report.json").read_text(encoding="utf-8"))
+    rows = report["summary"]
     labels = ["뉴스량 하위", "중간", "뉴스량 상위"]
     values = [row["mean_rank_ic_12m"] for row in rows]
     image = Image.new("RGB", (1200, 620), "white")
     draw = ImageDraw.Draw(image)
-    draw.text((60, 32), "뉴스량 상·하위의 모멘텀 IC 차이는 불확실했다", fill="#1F2937", font=font(25, True))
-    draw.text((60, 63), "관측 뉴스량 3분위별 6개월 모멘텀의 평균 12개월 Rank IC", fill="#6B7280", font=font(15))
+    draw.text((60, 32), "뉴스량은 모멘텀 예측력을 가르지 못했다", fill="#1F2937", font=font(25, True))
+    draw.text((60, 63), "원천 뉴스 248종목 · 2000.06~2025.04 · 뉴스량 3분위별 6개월 모멘텀의 평균 12개월 Rank IC", fill="#6B7280", font=font(15))
     x0, y_base, scale = 165, 480, 3400
     draw.line((130, y_base, 1130, y_base), fill="#9CA3AF", width=2)
     for tick in [0.00, 0.04, 0.08]:
@@ -239,8 +238,9 @@ def news_attention_chart() -> None:
         draw.text((x + 24, y_base - height - 34), f"IC {value:.3f}", fill="#1F2937", font=font(18, True))
         draw.text((x + 22, y_base + 20), label, fill="#1F2937", font=font(15, True))
         draw.text((x + 13, y_base + 47), f"192개월 · 월평균 {row['mean_n']:.1f}종목", fill="#6B7280", font=font(13))
-    ci = audit["news_dependence_audit"]["moving_block_bootstrap"]["ci_95"]
-    draw.text((60, 565), f"상위-하위 IC 차이 0.023, 12개월 블록 부트스트랩 95% CI [{ci[0]:.3f}, {ci[1]:.3f}]. 방향 차이는 통계적으로 확정되지 않았다.", fill="#374151", font=font(14))
+    diff = report["high_minus_low"]
+    ci = diff["ci_95"]
+    draw.text((60, 565), f"상위-하위 IC 차이 {diff['mean_rank_ic']:.3f}, 12개월 블록 부트스트랩 95% CI [{ci[0]:.3f}, {ci[1]:.3f}], p={diff['two_sided_sign_p']:.3f}.", fill="#374151", font=font(14))
     save_png(image, "03_observed_news_attention.png")
 
 

@@ -1,0 +1,8 @@
+{
+  "raw_adjusted_price_tickers": 3921,
+  "supplied_delisted_tickers": 1336,
+  "delisted_tickers_present_in_raw_adjusted_price": 1336,
+  "monthly_panel_tickers": 3672,
+  "delisted_tickers_present_in_monthly_panel": 1087,
+  "conclusion": "The supplied delisted-stock universe was not removed at raw-price construction. Early panel endpoints must not be relabelled as evidence of a survivor-only universe."
+}

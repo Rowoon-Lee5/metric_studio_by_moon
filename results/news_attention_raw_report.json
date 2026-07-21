@@ -1,0 +1,38 @@
+{
+  "source": {
+    "rows": 27595,
+    "tickers": 248,
+    "start": "2000-06-30",
+    "end": "2025-04-30"
+  },
+  "summary": [
+    {
+      "bucket": 1,
+      "months": 192,
+      "mean_rank_ic_12m": 0.05875907764846807,
+      "mean_n": 48.21875
+    },
+    {
+      "bucket": 2,
+      "months": 192,
+      "mean_rank_ic_12m": 0.01121310864582674,
+      "mean_n": 47.5625
+    },
+    {
+      "bucket": 3,
+      "months": 192,
+      "mean_rank_ic_12m": 0.05979117447529327,
+      "mean_n": 47.942708333333336
+    }
+  ],
+  "high_minus_low": {
+    "mean_rank_ic": 0.0010320968268252041,
+    "months": 192,
+    "block_months": 12,
+    "ci_95": [
+      -0.04138997874331864,
+      0.04397585743756875
+    ],
+    "two_sided_sign_p": 0.962
+  }
+}

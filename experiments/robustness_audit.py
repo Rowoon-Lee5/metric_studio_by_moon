@@ -90,7 +90,8 @@ def topology_rolling_walk_forward() -> dict:
 
 
 def news_dependence_audit(rng: np.random.Generator) -> dict:
-    detail = pd.read_csv(OUT / "news_attention_ic_detail.csv", parse_dates=["date"])
+    """Use the raw-headline panel rather than the old 70-ticker sentiment slice."""
+    detail = pd.read_csv(OUT / "news_attention_raw_ic_detail.csv", parse_dates=["date"])
     pivot = detail.pivot(index="date", columns="bucket", values="rank_ic_12m").dropna().sort_index()
     diff = pivot[3] - pivot[1]
     boot = moving_block_means(diff, block=12, reps=5000, rng=rng)
@@ -184,11 +185,15 @@ def coverage_audit() -> dict:
     global_end = coverage["max"].max()
     early_end = coverage.loc[coverage["max"] < global_end]
     coverage.to_csv(OUT / "price_panel_coverage_audit.csv", index=False, encoding="utf-8-sig")
+    delisting = json.loads((OUT / "delisting_universe_audit_report.json").read_text(encoding="utf-8"))
     return {
         "tickers": int(len(coverage)),
         "global_last_observation": str(global_end.date()),
         "tickers_ending_before_global_end": int(len(early_end)),
-        "note": "Early terminal observations are a coverage flag, not a delisting label. Delisting returns require a dedicated source before any survivorship correction.",
+        "supplied_delisted_tickers": delisting["supplied_delisted_tickers"],
+        "delisted_tickers_present_in_raw_adjusted_price": delisting["delisted_tickers_present_in_raw_adjusted_price"],
+        "delisted_tickers_present_in_monthly_panel": delisting["delisted_tickers_present_in_monthly_panel"],
+        "note": "Early terminal observations are a coverage flag, not a delisting label. The supplied delisted-stock universe is directly present in the raw adjusted-price universe.",
     }
 
 

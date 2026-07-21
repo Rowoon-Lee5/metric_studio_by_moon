@@ -19,15 +19,15 @@
   },
   "news_dependence_audit": {
     "months": 192,
-    "high_minus_low_mean_rank_ic": 0.022541696466520388,
+    "high_minus_low_mean_rank_ic": 0.0010320968268252041,
     "moving_block_bootstrap": {
       "block_months": 12,
       "replications": 5000,
       "ci_95": [
-        -0.08162202064089524,
-        0.12187992401244398
+        -0.041389978743318644,
+        0.04397585743756875
       ],
-      "two_sided_sign_p": 0.6476
+      "two_sided_sign_p": 0.962
     }
   },
   "consensus_benchmark": {
@@ -71,6 +71,9 @@
     "tickers": 3717,
     "global_last_observation": "2026-05-04",
     "tickers_ending_before_global_end": 1087,
-    "note": "Early terminal observations are a coverage flag, not a delisting label. Delisting returns require a dedicated source before any survivorship correction."
+    "supplied_delisted_tickers": 1336,
+    "delisted_tickers_present_in_raw_adjusted_price": 1336,
+    "delisted_tickers_present_in_monthly_panel": 1087,
+    "note": "Early terminal observations are a coverage flag, not a delisting label. The supplied delisted-stock universe is directly present in the raw adjusted-price universe."
   }
 }
