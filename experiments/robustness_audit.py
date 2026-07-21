@@ -65,6 +65,30 @@ def topology_time_split() -> dict:
     }
 
 
+def topology_rolling_walk_forward() -> dict:
+    long = pd.read_csv(OUT / "alpha_topology_monthly_returns.csv", parse_dates=["date"])
+    wide = long.pivot(index="date", columns="key", values="net_return").sort_index()
+    selections = []
+    realised = []
+    for year in range(2008, int(wide.index.max().year) + 1):
+        start = pd.Timestamp(f"{year}-01-01")
+        end = pd.Timestamp(f"{year + 1}-01-01")
+        train = wide.loc[wide.index < start]
+        test = wide.loc[(wide.index >= start) & (wide.index < end)]
+        if len(train) < 60 or test.empty:
+            continue
+        key = str(train.apply(t_stat).idxmax())
+        returns = test[key].dropna()
+        selections.append({"test_year": year, "selected_key": key, "train_months": len(train), "train_t": float(t_stat(train[key])), "test_months": len(returns), "test_cagr": cagr(returns)})
+        realised.extend({"date": date, "selected_key": key, "net_return": value} for date, value in returns.items())
+    selected = pd.DataFrame(selections)
+    realised_frame = pd.DataFrame(realised)
+    selected.to_csv(OUT / "topology_rolling_walk_forward_selections.csv", index=False, encoding="utf-8-sig")
+    realised_frame.to_csv(OUT / "topology_rolling_walk_forward_returns.csv", index=False, encoding="utf-8-sig")
+    series = realised_frame.net_return
+    return {"test_years": int(len(selected)), "months": int(len(series)), "cagr": cagr(series), "t_stat": t_stat(series), "unique_selected_strategies": int(selected.selected_key.nunique())}
+
+
 def news_dependence_audit(rng: np.random.Generator) -> dict:
     detail = pd.read_csv(OUT / "news_attention_ic_detail.csv", parse_dates=["date"])
     pivot = detail.pivot(index="date", columns="bucket", values="rank_ic_12m").dropna().sort_index()
@@ -172,6 +196,7 @@ def main() -> None:
     rng = np.random.default_rng(SEED)
     report = {
         "topology_time_split": topology_time_split(),
+        "topology_rolling_walk_forward": topology_rolling_walk_forward(),
         "news_dependence_audit": news_dependence_audit(rng),
         "consensus_benchmark": consensus_benchmark(),
         "failure_time_split": failure_time_split(rng),

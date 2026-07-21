@@ -10,6 +10,13 @@
     "test_t": 5.5548366896586066,
     "test_cagr": 0.4520188166953425
   },
+  "topology_rolling_walk_forward": {
+    "test_years": 19,
+    "months": 220,
+    "cagr": 0.317949169806248,
+    "t_stat": 4.806740751684887,
+    "unique_selected_strategies": 1
+  },
   "news_dependence_audit": {
     "months": 192,
     "high_minus_low_mean_rank_ic": 0.022541696466520388,
