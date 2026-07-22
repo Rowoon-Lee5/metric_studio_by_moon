@@ -240,8 +240,29 @@ def add_article(doc, draft_name):
         if not line:
             i += 1
             continue
-        if line.startswith("# "):
+        if line in {"### 재현 자료", "### GitHub에서 확인할 수 있는 것"}:
+            source_lines = []
+            disclaimer = None
+            heading = line[4:]
+            i += 1
+            while i < len(chunks):
+                candidate = chunks[i].strip()
+                if candidate.startswith("- ["):
+                    source_lines.append(candidate)
+                elif candidate.startswith("이 글은 투자 권유"):
+                    disclaimer = candidate
+                    break
+                i += 1
+            add_sources(doc, source_lines, heading)
+            if disclaimer:
+                add_markdown_paragraph(doc, disclaimer)
+            continue
+        elif line.startswith("# "):
             doc.add_heading(line[2:], level=1)
+        elif line.startswith("## "):
+            doc.add_heading(line[3:], level=2)
+        elif line.startswith("### "):
+            doc.add_heading(line[4:], level=3)
         elif line.startswith("**[책 발췌 이미지") or line.startswith("**[이미지"):
             filename, caption = next(images)
             add_image(doc, filename, caption)
@@ -267,23 +288,6 @@ def add_article(doc, draft_name):
                 parsed.append(values)
             if parsed:
                 add_table(doc, parsed)
-            continue
-        elif line in {"### 재현 자료", "### GitHub에서 확인할 수 있는 것"}:
-            source_lines = []
-            disclaimer = None
-            heading = line[4:]
-            i += 1
-            while i < len(chunks):
-                candidate = chunks[i].strip()
-                if candidate.startswith("- ["):
-                    source_lines.append(candidate)
-                elif candidate.startswith("이 글은 투자 권유"):
-                    disclaimer = candidate
-                    break
-                i += 1
-            add_sources(doc, source_lines, heading)
-            if disclaimer:
-                add_markdown_paragraph(doc, disclaimer)
             continue
         else:
             add_markdown_paragraph(doc, line)
