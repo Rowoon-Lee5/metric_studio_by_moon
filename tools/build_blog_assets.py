@@ -86,7 +86,7 @@ def topology_map(rows: list[dict[str, str]]) -> None:
         '<desc id="desc">Four panels show how many strategy configurations remain robust at each liquidity universe and cost multiplier. Only low volatility and small cap retain robust configurations.</desc>',
         '<rect width="1200" height="720" fill="#FFFFFF"/>',
         '<style>text{font-family:Arial,sans-serif;fill:#1F2937}.muted{fill:#6B7280}.small{font-size:14px}.axis{font-size:13px}.title{font-size:25px;font-weight:700}.panel{font-size:18px;font-weight:700}.note{font-size:15px}</style>',
-        '<text x="60" y="52" class="title">견고한 전략은 조건 변화에도 유지되는 결과다</text>',
+        '<text x="60" y="52" class="title">단일 최적값보다 안정적인 구간을 확인한다</text>',
         '<text x="60" y="78" class="muted small">양의 비용 차감 CAGR · t &gt; 1.96 · MDD &gt; -60% · 평균 체결률 ≥ 80%를 모두 충족한 조합 수</text>',
     ]
     panel_positions = [(60, 130), (630, 130), (60, 410), (630, 410)]
@@ -118,7 +118,7 @@ def topology_map(rows: list[dict[str, str]]) -> None:
 
     image = Image.new("RGB", (1200, 720), "white")
     draw = ImageDraw.Draw(image)
-    draw.text((60, 32), "견고한 전략은 조건 변화에도 유지되는 결과다", fill="#1F2937", font=font(25, True))
+    draw.text((60, 32), "단일 최적값보다 안정적인 구간을 확인한다", fill="#1F2937", font=font(25, True))
     draw.text((60, 63), "양의 비용 차감 CAGR · t > 1.96 · MDD > -60% · 평균 체결률 >= 80%를 모두 충족한 조합 수", fill="#6B7280", font=font(14))
     for signal, (x0, y0) in zip(SIGNALS, panel_positions):
         draw.text((x0, y0 - 21), LABELS[signal], fill="#1F2937", font=font(18, True))
