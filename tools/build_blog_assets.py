@@ -80,66 +80,75 @@ def topology_map(rows: list[dict[str, str]]) -> None:
         if row["robust"] == "True":
             counts[(row["signal"], round(float(row["universe_pct"]), 1), round(float(row["cost_multiplier"]), 1))] += 1
 
-    svg = [
-        '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">',
-        '<title id="title">Robust strategy count by liquidity universe and cost assumption</title>',
-        '<desc id="desc">Four panels show how many strategy configurations remain robust at each liquidity universe and cost multiplier. Only low volatility and small cap retain robust configurations.</desc>',
-        '<rect width="1200" height="720" fill="#FFFFFF"/>',
-        '<style>text{font-family:Arial,sans-serif;fill:#1F2937}.muted{fill:#6B7280}.small{font-size:14px}.axis{font-size:13px}.title{font-size:25px;font-weight:700}.panel{font-size:18px;font-weight:700}.note{font-size:15px}</style>',
-        '<text x="60" y="52" class="title">단일 최적값보다 안정적인 구간을 확인한다</text>',
-        '<text x="60" y="78" class="muted small">양의 비용 차감 CAGR · t &gt; 1.96 · MDD &gt; -60% · 평균 체결률 ≥ 80%를 모두 충족한 조합 수</text>',
-    ]
-    panel_positions = [(60, 130), (630, 130), (60, 410), (630, 410)]
-    cell_w, cell_h = 48, 35
-    for (signal, (x0, y0)) in zip(SIGNALS, panel_positions):
-        svg.append(f'<text x="{x0}" y="{y0 - 18}" class="panel">{LABELS[signal]}</text>')
+    image = Image.new("RGB", (1600, 1120), "white")
+    draw = ImageDraw.Draw(image)
+    draw.text((60, 34), "유동성·비용 가정을 바꾼 뒤에도 남은 조합", fill="#1F2937", font=font(32, True))
+    draw.text((60, 78), "한 칸의 ‘5/12’는 보유 종목 수 4가지 × 운용 규모 3가지, 총 12개 조합 중 네 기준을 모두 통과한 조합이 5개라는 뜻이다.", fill="#4B5563", font=font(17))
+    draw.text((60, 105), "통과 기준: 비용 차감 CAGR > 0 · t > 1.96 · MDD > -60% · 평균 체결률 ≥ 80%", fill="#6B7280", font=font(16))
+    panel_positions = [(60, 190), (830, 190), (60, 570), (830, 570)]
+    cell_w, cell_h = 61, 46
+    for signal, (x0, y0) in zip(SIGNALS, panel_positions):
+        draw.rounded_rectangle((x0, y0 - 42, x0 + 700, y0 + 250), radius=8, outline="#E5E7EB", width=2)
+        draw.text((x0 + 18, y0 - 31), LABELS[signal], fill="#1F2937", font=font(22, True))
+        draw.text((x0 + 472, y0 - 28), "유동성 상위 비율", fill="#6B7280", font=font(15))
         for col, pct in enumerate(PCTS):
-            x = x0 + 72 + col * cell_w
-            svg.append(f'<text x="{x + 16}" y="{y0 - 3}" text-anchor="middle" class="axis muted">{int(pct * 100)}</text>')
-        svg.append(f'<text x="{x0 + 264}" y="{y0 - 28}" text-anchor="middle" class="axis muted">유동성 유니버스 (%)</text>')
+            x = x0 + 145 + col * cell_w
+            label = "전체" if pct == 1.0 else f"{int(pct * 100)}%"
+            box = draw.textbbox((0, 0), label, font=font(13))
+            draw.text((x + 26 - (box[2] - box[0]) / 2, y0 + 6), label, fill="#4B5563", font=font(13, True))
         for row_i, cost in enumerate(COSTS):
-            y = y0 + row_i * cell_h
-            svg.append(f'<text x="{x0 + 60}" y="{y + 23}" text-anchor="end" class="axis muted">{cost:.1f}×</text>')
+            y = y0 + 38 + row_i * cell_h
+            draw.text((x0 + 18, y + 11), f"충격 {cost:.1f}배", fill="#4B5563", font=font(14))
             for col, pct in enumerate(PCTS):
-                x = x0 + 72 + col * cell_w
+                x = x0 + 145 + col * cell_w
                 count = counts[(signal, pct, cost)]
                 color = COLORS[signal] if count else "#EEF1F4"
-                opacity = 0.25 + min(count, 8) / 10 if count else 1
-                svg.append(f'<rect x="{x}" y="{y}" width="42" height="29" rx="3" fill="{color}" opacity="{opacity:.2f}"/>')
+                draw.rounded_rectangle((x, y, x + 54, y + 37), radius=4, fill=color)
                 if count:
-                    svg.append(f'<text x="{x + 21}" y="{y + 20}" text-anchor="middle" class="small" fill="#FFFFFF" style="fill:#FFFFFF">{count}</text>')
-        svg.append(f'<text x="{x0 + 8}" y="{y0 + 78}" transform="rotate(-90 {x0 + 8} {y0 + 78})" class="axis muted">비용 배수</text>')
+                    label = f"{count}/12"
+                    box = draw.textbbox((0, 0), label, font=font(14, True))
+                    draw.text((x + 27 - (box[2] - box[0]) / 2, y + 10), label, fill="white", font=font(14, True))
+    draw.rounded_rectangle((60, 925, 1540, 1050), radius=8, fill="#F8FAFC", outline="#D1D5DB", width=1)
+    draw.text((85, 950), "읽는 예", fill="#1F2937", font=font(18, True))
+    draw.text((210, 950), "저변동성 · 유동성 상위 70% · 충격 1.0배의 5/12는, 그 조건 아래 12개 조합 중 5개가 통과했다는 뜻이다.", fill="#374151", font=font(17))
+    draw.text((85, 988), "핵심", fill="#1F2937", font=font(18, True))
+    draw.text((210, 988), "반전·모멘텀은 전부 0/12, 저변동성은 60~90%, 소형주는 80~90%에서만 안정적인 구간이 남았다.", fill="#374151", font=font(17))
+    draw.text((60, 1074), "빈 칸은 0/12다. 숫자는 종목 수·수익률·월 수가 아니라, 조건을 통과한 전략 조합 수다.", fill="#6B7280", font=font(16))
+    save_png(image, "01_robustness_map.png")
+
+    # SVG is kept as a concise accessible companion for repository readers.
+    svg = [
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120">',
+        '<rect width="1600" height="1120" fill="white"/>',
+        '<style>text{font-family:Arial,sans-serif;fill:#1F2937}.title{font-size:32px;font-weight:700}.sub{font-size:17px;fill:#4B5563}.panel{font-size:22px;font-weight:700}.axis{font-size:13px;fill:#4B5563}.cell{font-size:14px;font-weight:700;fill:white}.note{font-size:17px;fill:#374151}</style>',
+        '<text x="60" y="66" class="title">유동성·비용 가정을 바꾼 뒤에도 남은 조합</text>',
+        '<text x="60" y="105" class="sub">한 칸의 5/12는 총 12개 조합 중 네 기준을 모두 통과한 조합이 5개라는 뜻이다.</text>',
+    ]
+    for signal, (x0, y0) in zip(SIGNALS, panel_positions):
+        svg.append(f'<rect x="{x0}" y="{y0 - 42}" width="700" height="292" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>')
+        svg.append(f'<text x="{x0 + 18}" y="{y0 - 10}" class="panel">{LABELS[signal]}</text>')
+        for col, pct in enumerate(PCTS):
+            x = x0 + 145 + col * cell_w
+            label = "전체" if pct == 1.0 else f"{int(pct * 100)}%"
+            svg.append(f'<text x="{x + 27}" y="{y0 + 20}" text-anchor="middle" class="axis">{label}</text>')
+        for row_i, cost in enumerate(COSTS):
+            y = y0 + 38 + row_i * cell_h
+            svg.append(f'<text x="{x0 + 18}" y="{y + 25}" class="axis">충격 {cost:.1f}배</text>')
+            for col, pct in enumerate(PCTS):
+                x = x0 + 145 + col * cell_w
+                count = counts[(signal, pct, cost)]
+                color = COLORS[signal] if count else "#EEF1F4"
+                svg.append(f'<rect x="{x}" y="{y}" width="54" height="37" rx="4" fill="{color}"/>')
+                if count:
+                    svg.append(f'<text x="{x + 27}" y="{y + 24}" text-anchor="middle" class="cell">{count}/12</text>')
     svg.extend([
-        '<line x1="60" y1="662" x2="1140" y2="662" stroke="#D1D5DB"/>',
-        '<text x="60" y="692" class="note">읽는 법: 숫자는 보유 종목 수와 운용 규모를 바꾼 뒤에도 남은 견고 전략의 수다. 빈칸은 생존 전략이 없다는 뜻이다.</text>',
+        '<rect x="60" y="925" width="1480" height="125" rx="8" fill="#F8FAFC" stroke="#D1D5DB"/>',
+        '<text x="85" y="974" class="note">읽는 예: 저변동성 · 유동성 상위 70% · 충격 1.0배의 5/12는, 그 조건 아래 12개 조합 중 5개가 통과했다는 뜻이다.</text>',
+        '<text x="85" y="1012" class="note">핵심: 반전·모멘텀은 전부 0/12, 저변동성은 60~90%, 소형주는 80~90%에서만 안정적인 구간이 남았다.</text>',
+        '<text x="60" y="1082" class="sub">빈 칸은 0/12다. 숫자는 종목 수·수익률·월 수가 아니라, 조건을 통과한 전략 조합 수다.</text>',
         '</svg>',
     ])
     save_svg("01_robustness_map.svg", "".join(svg))
-
-    image = Image.new("RGB", (1200, 720), "white")
-    draw = ImageDraw.Draw(image)
-    draw.text((60, 32), "단일 최적값보다 안정적인 구간을 확인한다", fill="#1F2937", font=font(25, True))
-    draw.text((60, 63), "양의 비용 차감 CAGR · t > 1.96 · MDD > -60% · 평균 체결률 >= 80%를 모두 충족한 조합 수", fill="#6B7280", font=font(14))
-    for signal, (x0, y0) in zip(SIGNALS, panel_positions):
-        draw.text((x0, y0 - 21), LABELS[signal], fill="#1F2937", font=font(18, True))
-        draw.text((x0 + 165, y0 - 39), "유동성 유니버스 (%)", fill="#6B7280", font=font(13))
-        for col, pct in enumerate(PCTS):
-            x = x0 + 72 + col * cell_w
-            draw.text((x + 13, y0 - 4), str(int(pct * 100)), fill="#6B7280", font=font(12))
-        for row_i, cost in enumerate(COSTS):
-            y = y0 + row_i * cell_h
-            draw.text((x0 + 31, y + 8), f"{cost:.1f}배", fill="#6B7280", font=font(12))
-            for col, pct in enumerate(PCTS):
-                x = x0 + 72 + col * cell_w
-                count = counts[(signal, pct, cost)]
-                color = COLORS[signal] if count else "#EEF1F4"
-                draw.rounded_rectangle((x, y, x + 42, y + 29), radius=3, fill=color)
-                if count:
-                    draw.text((x + 17, y + 6), str(count), fill="white", font=font(13, True))
-        draw.text((x0, y0 + 151), "비용 배수", fill="#6B7280", font=font(13))
-    draw.line((60, 662, 1140, 662), fill="#D1D5DB", width=1)
-    draw.text((60, 681), "읽는 법: 숫자는 보유 종목 수와 운용 규모를 바꾼 뒤에도 남은 견고 전략의 수다. 빈칸은 생존 전략이 없다는 뜻이다.", fill="#374151", font=font(14))
-    save_png(image, "01_robustness_map.png")
 
 
 def evidence_summary() -> None:
