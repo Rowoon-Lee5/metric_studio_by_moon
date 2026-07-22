@@ -295,16 +295,16 @@ def consensus_cumulative_chart() -> None:
 
 
 def failure_coherence_chart() -> None:
-    rows = list(csv.DictReader((RESULTS / "model_failure_state_summary.csv").open(encoding="utf-8-sig")))
+    rows = list(csv.DictReader((RESULTS / "model_failure_lead_summary.csv").open(encoding="utf-8-sig")))
     image = Image.new("RGB", (1200, 650), "white")
     draw = ImageDraw.Draw(image)
-    draw.text((60, 32), "동시에 실패한 신호가 많을수록 다음 달 시장수익률은 나빠졌다", fill="#1F2937", font=font(25, True))
-    draw.text((60, 63), "0~4개 팩터 모델 실패 상태 뒤의 다음 달 동일가중 시장 평균수익률", fill="#6B7280", font=font(15))
+    draw.text((60, 32), "공동 실패는 다음 달 수익률을 가르지 못했다", fill="#1F2937", font=font(25, True))
+    draw.text((60, 63), "월 t의 네 신호 실패를 월말에 관측한 뒤, t+1의 적격 종목군 동일가중 수익률을 비교", fill="#6B7280", font=font(15))
     center_y, x0, bar_w, step, scale = 320, 190, 130, 190, 1200
     draw.line((120, center_y, 1130, center_y), fill="#6B7280", width=2)
     draw.text((72, center_y - 10), "0%", fill="#6B7280", font=font(13))
     for index, row in enumerate(rows):
-        mean = float(row["mean"])
+        mean = float(row["mean_following_month_return"])
         x = x0 + index * step
         h = int(abs(mean) * scale)
         color = "#247BA0" if mean >= 0 else "#E76F51"
@@ -312,9 +312,9 @@ def failure_coherence_chart() -> None:
         draw.rounded_rectangle(coords, radius=5, fill=color)
         label_y = center_y - h - 32 if mean >= 0 else center_y + h + 7
         draw.text((x + 25, label_y), f"{mean * 100:.1f}%", fill="#1F2937", font=font(18, True))
-        draw.text((x + 20, 535), f"{row['failure_coherence']}개 실패", fill="#1F2937", font=font(14, True))
-        draw.text((x + 42, 560), f"n = {row['size']}", fill="#6B7280", font=font(13))
-    draw.text((60, 605), "이 패턴은 가설 생성용이다. 3개·4개 실패 상태는 각각 n=2, n=5로 매매 규칙을 만들기에는 표본이 너무 작다.", fill="#374151", font=font(14))
+        draw.text((x + 20, 535), f"{row['failed_signals']}개 실패", fill="#1F2937", font=font(14, True))
+        draw.text((x + 42, 560), f"n = {row['observations']}", fill="#6B7280", font=font(13))
+    draw.text((60, 605), "0~2개 실패 상태의 평균은 1.0~1.4% 범위다. 3개·4개 상태는 n=1·5이므로 규칙이나 예측력으로 읽을 수 없다.", fill="#374151", font=font(14))
     save_png(image, "05_model_failure_coherence.png")
 
 

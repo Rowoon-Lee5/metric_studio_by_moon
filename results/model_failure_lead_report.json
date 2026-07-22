@@ -1,0 +1,52 @@
+{
+  "timing": "Each failure is computed from the realised return during month t. The target is the eligible-universe equal-weighted return during month t+1. This is a forward audit, not a same-month association.",
+  "market_definition": "The target is not KOSPI/KOSDAQ index return. It is the equal-weighted next-month adjusted-price return of stocks with all four signal inputs and 21-day ADV available at the formation month.",
+  "failure_definition": "For each of four 30-stock signal portfolios, realised month-t return is below its own trailing 36-month mean by more than one trailing standard deviation; at least 24 history months are required.",
+  "summary": [
+    {
+      "failed_signals": 0,
+      "observations": 209,
+      "mean_following_month_return": 0.01339695154955668,
+      "median_following_month_return": 0.011145497458844194
+    },
+    {
+      "failed_signals": 1,
+      "observations": 63,
+      "mean_following_month_return": 0.009964975369252758,
+      "median_following_month_return": 0.007050216138939001
+    },
+    {
+      "failed_signals": 2,
+      "observations": 30,
+      "mean_following_month_return": 0.01403991955799205,
+      "median_following_month_return": 0.004271929611997366
+    },
+    {
+      "failed_signals": 3,
+      "observations": 1,
+      "mean_following_month_return": 0.03155879671231073,
+      "median_following_month_return": 0.03155879671231073
+    },
+    {
+      "failed_signals": 4,
+      "observations": 5,
+      "mean_following_month_return": -0.058074282533932854,
+      "median_following_month_return": -0.0022563955671678296
+    }
+  ],
+  "time_split": [
+    {
+      "period": "2000~2013",
+      "observations": 161,
+      "spearman_failed_signals_vs_following_return": -0.03645682871255363,
+      "linear_slope_per_additional_failure": -0.013581003394313854
+    },
+    {
+      "period": "2014~2026",
+      "observations": 147,
+      "spearman_failed_signals_vs_following_return": -0.03650257788340114,
+      "linear_slope_per_additional_failure": 0.001182557011965157
+    }
+  ],
+  "warning": "The four portfolios share a price/volume/market-cap panel. Sparse high-failure states and common inputs prevent a trading-rule interpretation."
+}

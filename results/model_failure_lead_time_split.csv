@@ -1,0 +1,3 @@
+﻿period,observations,spearman_failed_signals_vs_following_return,linear_slope_per_additional_failure
+2000~2013,161,-0.03645682871255363,-0.013581003394313854
+2014~2026,147,-0.03650257788340114,0.001182557011965157
