@@ -20,9 +20,11 @@ OUTPUTS = {
 packet.IMAGE_MAP = {
     "00_연재_소개.md": [],
     "01_알파는_봉우리인가_대륙인가.md": [
+        ("book_figure_18_liquidity_universe_recreated.png", "책 2장 그림 18. 유동성 유니버스 제한에 따른 포트폴리오 수익률 변화 추이(사진 기준 재작성)"),
         ("01_robustness_map.png", "그림 1. 유동성·비용 조건별로 살아남은 전략 조합"),
-        ("02_evidence_decision_boundary.png", "그림 2. 다중검정 보정 뒤의 의사결정 경계"),
-        ("10_suspension_screened_smallcap.png", "그림 3. 거래정지 편입 제외 뒤 소형주 전략 성과"),
+        ("11_participation_sensitivity.png", "그림 2. 종목당 최대 참여율 가정에 따른 안정적인 조합 수"),
+        ("02_evidence_decision_boundary.png", "그림 3. 다중검정 보정 뒤의 의사결정 경계"),
+        ("10_suspension_screened_smallcap.png", "그림 4. 거래정지 편입 제외 뒤 소형주 전략 성과"),
     ],
     "02_거래회전율은_관심이_아니었다.md": [
         ("03_observed_news_attention.png", "그림 1. 원천 뉴스량별 모멘텀 Rank IC"),

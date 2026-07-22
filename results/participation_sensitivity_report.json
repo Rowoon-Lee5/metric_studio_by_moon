@@ -1,0 +1,45 @@
+{
+  "assumption": "Each name can trade at most participation × 21-day ADV at the monthly rebalance; unfilled capital remains cash.",
+  "participations": [
+    0.025,
+    0.05,
+    0.1
+  ],
+  "summary": [
+    {
+      "participation": 0.025,
+      "robust_nodes": 53,
+      "low_volatility_nodes": 40,
+      "small_cap_nodes": 13,
+      "robust_at_100m": 50,
+      "robust_at_1bn": 3,
+      "robust_at_10bn": 0
+    },
+    {
+      "participation": 0.05,
+      "robust_nodes": 64,
+      "low_volatility_nodes": 52,
+      "small_cap_nodes": 12,
+      "robust_at_100m": 56,
+      "robust_at_1bn": 8,
+      "robust_at_10bn": 0
+    },
+    {
+      "participation": 0.1,
+      "robust_nodes": 75,
+      "low_volatility_nodes": 55,
+      "small_cap_nodes": 20,
+      "robust_at_100m": 60,
+      "robust_at_1bn": 15,
+      "robust_at_10bn": 0
+    }
+  ],
+  "panel_integrity": {
+    "max_allowed_monthly_gap_days": 40,
+    "non_contiguous_links": 21,
+    "tickers_with_non_contiguous_links": 19,
+    "rows_before_reentry_quarantine": 593279,
+    "rows_after_reentry_quarantine": 591515
+  },
+  "warning": "This is an execution-assumption sensitivity, not observed order-book execution or a validation of the impact function."
+}

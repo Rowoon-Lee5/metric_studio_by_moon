@@ -335,6 +335,38 @@ def suspension_screen_chart() -> None:
     save_png(image, "10_suspension_screened_smallcap.png")
 
 
+def participation_sensitivity_chart() -> None:
+    report = json.loads((RESULTS / "participation_sensitivity_report.json").read_text(encoding="utf-8"))
+    rows = report["summary"]
+    image = Image.new("RGB", (1200, 650), "white")
+    draw = ImageDraw.Draw(image)
+    draw.text((60, 32), "참여율을 바꿔도 100억 원 조건은 살아나지 않았다", fill="#1F2937", font=font(25, True))
+    draw.text((60, 64), "종목당 최대 주문량: 21일 평균 거래대금의 2.5% · 5.0% · 10.0%", fill="#6B7280", font=font(15))
+    base_y, scale = 470, 4.5
+    for tick in range(0, 81, 20):
+        y = base_y - tick * scale
+        draw.line((130, y, 1130, y), fill="#E5E7EB", width=1)
+        draw.text((72, y - 8), str(tick), fill="#6B7280", font=font(13))
+    labels = ["2.5%", "5.0%", "10.0%"]
+    for index, row in enumerate(rows):
+        x = 260 + index * 300
+        low = int(row["low_volatility_nodes"])
+        small = int(row["small_cap_nodes"])
+        low_h, small_h = int(low * scale), int(small * scale)
+        draw.rounded_rectangle((x, base_y - low_h, x + 135, base_y), radius=5, fill="#247BA0")
+        draw.rectangle((x, base_y - low_h - small_h, x + 135, base_y - low_h), fill="#E76F51")
+        draw.text((x + 41, base_y - low_h - small_h - 34), str(low + small), fill="#1F2937", font=font(21, True))
+        draw.text((x + 35, base_y + 22), labels[index], fill="#1F2937", font=font(17, True))
+        draw.text((x + 18, base_y + 52), "최대 참여율", fill="#6B7280", font=font(13))
+    draw.rectangle((740, 150, 758, 168), fill="#247BA0")
+    draw.text((770, 148), "저변동성", fill="#374151", font=font(15))
+    draw.rectangle((900, 150, 918, 168), fill="#E76F51")
+    draw.text((930, 148), "소형주", fill="#374151", font=font(15))
+    draw.line((60, 545, 1140, 545), fill="#D1D5DB", width=1)
+    draw.text((60, 575), "세 가정 모두에서 100억 원 조건의 안정적인 조합은 0개였다. 이 그림은 실제 호가 체결을 관측한 결과가 아니라 참여율 가정의 민감도 분석이다.", fill="#374151", font=font(14))
+    save_png(image, "11_participation_sensitivity.png")
+
+
 def book_figure_18_recreated() -> None:
     """Redraw the user-supplied book photograph as a clean, usable figure.
 
@@ -386,6 +418,7 @@ def main() -> None:
     consensus_cumulative_chart()
     failure_coherence_chart()
     suspension_screen_chart()
+    participation_sensitivity_chart()
     book_figure_18_recreated()
     book_excerpt_card(
         "09_book_excerpt_liquidity.png",
