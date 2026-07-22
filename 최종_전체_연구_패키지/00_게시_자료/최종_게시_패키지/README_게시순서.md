@@ -1,6 +1,6 @@
 # 문병로 교수의 메트릭 스튜디오 02 | 최종 게시 패키지
 
-이 폴더만 열면 2장 연재 ①~④를 게시할 수 있다.
+이 폴더만 열면 2장 연재 0편~④를 게시할 수 있다.
 
 ## 게시할 Word 원고
 
@@ -8,15 +8,17 @@
 
 게시 순서는 다음과 같다.
 
-1. ① 유동성 상위 80%는 누구에게 최적인가
-2. ② 거래회전율은 관심이 아니었다
-3. ③ 여러 모델의 합의는 왜 실패했을까
-4. ④ 시장은 가격보다 먼저 모델의 실패로 드러날 수 있을까
+1. 0편 2장 시장관찰을 읽고, 수익률보다 먼저 의심한 것
+2. ① 유동성 상위 80%는 누구에게 최적인가
+3. ② 거래회전율은 관심이 아니었다
+4. ③ 여러 모델의 합의는 왜 실패했을까
+5. ④ 시장은 가격보다 먼저 모델의 실패방식으로 드러날 수 있을까
 
 ## 네이버에 넣을 이미지
 
 `02_네이버_업로드_이미지`의 PNG를 해당 Word 문서의 그림 캡션 위치에 맞춰 올린다.
 
+- 0편: `09_book_excerpt_liquidity.png`
 - ①: `09_book_excerpt_liquidity.png` → `01_robustness_map.png` → `02_evidence_decision_boundary.png` → `10_suspension_screened_smallcap.png`
 - ②: `06_book_excerpt_popularity.png` → `03_observed_news_attention.png`
 - ③: `07_book_excerpt_strategy.png` → `04_model_consensus_cumulative.png`
