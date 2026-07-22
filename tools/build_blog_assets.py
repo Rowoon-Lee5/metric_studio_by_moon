@@ -335,6 +335,48 @@ def suspension_screen_chart() -> None:
     save_png(image, "10_suspension_screened_smallcap.png")
 
 
+def book_figure_18_recreated() -> None:
+    """Redraw the user-supplied book photograph as a clean, usable figure.
+
+    The book photograph has no printed point values.  The series is therefore
+    transcribed from the visible axis and marker positions and is labelled as
+    an approximation in the rendered figure rather than presented as raw data.
+    """
+    labels = ["상위\n10%", "상위\n20%", "상위\n30%", "상위\n40%", "상위\n50%", "상위\n60%", "상위\n70%", "상위\n80%", "상위\n90%", "전체"]
+    values = [28.0, 35.5, 41.5, 43.5, 50.5, 54.0, 62.5, 67.0, 65.7, 68.0]
+    image = Image.new("RGB", (1800, 1120), "white")
+    draw = ImageDraw.Draw(image)
+    navy, muted, grid = "#173F73", "#4B5563", "#D9DEE7"
+    draw.rounded_rectangle((68, 54, 272, 112), radius=8, fill="#5F4B7B")
+    draw.text((92, 67), "그림 18", fill="white", font=font(24, True))
+    draw.text((306, 61), "유동성으로 인한 유니버스 제한에 따른 포트폴리오 수익률 변화 추이", fill="#111827", font=font(32, True))
+    left, top, right, bottom = 170, 190, 1660, 840
+    for tick in range(20, 71, 10):
+        y = bottom - (tick - 20) / 50 * (bottom - top)
+        draw.line((left, y, right, y), fill=grid, width=2)
+        label = f"{tick}%"
+        box = draw.textbbox((0, 0), label, font=font(24))
+        draw.text((left - 32 - (box[2] - box[0]), y - 15), label, fill=muted, font=font(24))
+    draw.line((left, top, left, bottom), fill="#6B7280", width=3)
+    draw.line((left, bottom, right, bottom), fill="#6B7280", width=3)
+    x_step = (right - left) / (len(values) - 1)
+    points = []
+    for index, value in enumerate(values):
+        x = left + index * x_step
+        y = bottom - (value - 20) / 50 * (bottom - top)
+        points.append((x, y))
+        for line_index, line in enumerate(labels[index].split("\n")):
+            box = draw.textbbox((0, 0), line, font=font(23))
+            draw.text((x - (box[2] - box[0]) / 2, bottom + 34 + line_index * 29), line, fill="#374151", font=font(23))
+    draw.line(points, fill=navy, width=7, joint="curve")
+    for x, y in points:
+        draw.ellipse((x - 12, y - 12, x + 12, y + 12), fill=navy)
+    draw.line((70, 950, 1730, 950), fill="#D1D5DB", width=2)
+    draw.text((70, 978), "출처: 『문병로 교수의 메트릭 스튜디오 02』 2장 그림 18을 바탕으로 재작성", fill=muted, font=font(20))
+    draw.text((70, 1014), "주: 원문 사진에 점별 수치가 없어 축과 점 위치를 기준으로 근사해 그렸다. 정밀 인용에는 원표의 수치를 확인해야 한다.", fill=muted, font=font(18))
+    save_png(image, "book_figure_18_liquidity_universe_recreated.png")
+
+
 def main() -> None:
     with (RESULTS / "alpha_topology_nodes.csv").open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
@@ -344,6 +386,7 @@ def main() -> None:
     consensus_cumulative_chart()
     failure_coherence_chart()
     suspension_screen_chart()
+    book_figure_18_recreated()
     book_excerpt_card(
         "09_book_excerpt_liquidity.png",
         "유동성이 미치는 영향",
