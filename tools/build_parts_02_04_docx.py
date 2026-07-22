@@ -218,8 +218,8 @@ def add_table(doc, rows):
     doc.add_paragraph().paragraph_format.space_after = Pt(0)
 
 
-def add_sources(doc, lines):
-    doc.add_heading("재현 자료", level=2)
+def add_sources(doc, lines, heading):
+    doc.add_heading(heading, level=2)
     for line in lines:
         match = re.match(r"- \[(.*?)\]\((.*?)\)", line)
         if match:
@@ -268,9 +268,10 @@ def add_article(doc, draft_name):
             if parsed:
                 add_table(doc, parsed)
             continue
-        elif line == "### 재현 자료":
+        elif line in {"### 재현 자료", "### GitHub에서 확인할 수 있는 것"}:
             source_lines = []
             disclaimer = None
+            heading = line[4:]
             i += 1
             while i < len(chunks):
                 candidate = chunks[i].strip()
@@ -280,7 +281,7 @@ def add_article(doc, draft_name):
                     disclaimer = candidate
                     break
                 i += 1
-            add_sources(doc, source_lines)
+            add_sources(doc, source_lines, heading)
             if disclaimer:
                 add_markdown_paragraph(doc, disclaimer)
             continue
