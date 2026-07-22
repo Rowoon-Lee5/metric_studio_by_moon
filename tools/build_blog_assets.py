@@ -376,6 +376,46 @@ def participation_sensitivity_chart() -> None:
     save_png(image, "11_participation_sensitivity.png")
 
 
+def stop_loss_daily_close_chart() -> None:
+    report = json.loads((RESULTS / "stop_loss_daily_close_report.json").read_text(encoding="utf-8"))
+    rows = {row["rule"]: row for row in report["summary"]}
+    order = [("손절 없음", "hold", "#64748B"), ("-10%", "stop_10", "#247BA0"), ("-20%", "stop_20", "#6C8EBF"), ("-30%", "stop_30", "#E76F51")]
+    image = Image.new("RGB", (1200, 700), "white")
+    draw = ImageDraw.Draw(image)
+    draw.text((60, 32), "손절 기준은 수익률보다 손실 경로를 바꿨다", fill="#1F2937", font=font(25, True))
+    draw.text((60, 65), "일별 종가가 기준 아래로 내려간 뒤 다음 거래일 종가에 청산 · 317개월 · 15,464개 보유-월", fill="#6B7280", font=font(15))
+    headers = [(70, "규칙"), (280, "CAGR"), (445, "MDD"), (605, "손절 발생"), (805, "손절 뒤 월말 회복"), (1040, "해석")]
+    draw.rounded_rectangle((60, 120, 1140, 172), radius=5, fill="#F1F5F9")
+    for x, label in headers:
+        draw.text((x, 136), label, fill="#334155", font=font(15, True))
+    for index, (label, key, color) in enumerate(order):
+        row = rows[key]
+        y = 188 + index * 102
+        draw.line((60, y + 77, 1140, y + 77), fill="#E5E7EB", width=1)
+        draw.rounded_rectangle((70, y + 10, 88, y + 28), radius=3, fill=color)
+        draw.text((100, y + 7), label, fill="#1F2937", font=font(18, True))
+        draw.text((280, y + 7), f"{row['cagr'] * 100:.1f}%", fill="#1F2937", font=font(18, True))
+        draw.text((445, y + 7), f"{row['mdd'] * 100:.1f}%", fill="#1F2937", font=font(18, True))
+        if key == "hold":
+            draw.text((605, y + 7), "-", fill="#64748B", font=font(18))
+            draw.text((805, y + 7), "-", fill="#64748B", font=font(18))
+            note = "기준선"
+        else:
+            draw.text((605, y + 7), f"{row['stop_hit_rate'] * 100:.1f}%", fill="#1F2937", font=font(18, True))
+            draw.text((805, y + 7), f"{row['recovered_by_month_end_rate'] * 100:.1f}%", fill="#1F2937", font=font(18, True))
+            note = "낙폭 완화" if key == "stop_10" else "보호 효과 약함"
+        draw.text((1040, y + 7), note, fill="#374151", font=font(15))
+        if key == "stop_10":
+            draw.text((100, y + 42), "MDD는 낮아졌지만, 손절된 종목의 41.9%는 월말까지 손절 청산가보다 회복했다.", fill="#4B5563", font=font(14))
+        elif key == "stop_20":
+            draw.text((100, y + 42), "CAGR은 비슷하지만 MDD 개선은 거의 없었다.", fill="#4B5563", font=font(14))
+        elif key == "stop_30":
+            draw.text((100, y + 42), "느슨한 기준은 낙폭도 줄이지 못했고 CAGR도 낮아졌다.", fill="#4B5563", font=font(14))
+    draw.rounded_rectangle((60, 612, 1140, 670), radius=6, fill="#FFF7ED", outline="#FED7AA")
+    draw.text((80, 627), "주의: 장중 저가·호가·실제 체결이 없는 일별 수정주가 기반의 종가 청산 프록시다. 실행 가능한 손절 수익률을 뜻하지 않는다.", fill="#7C2D12", font=font(14))
+    save_png(image, "12_stop_loss_daily_close_audit.png")
+
+
 def book_figure_18_recreated() -> None:
     """Redraw the user-supplied book photograph as a clean, usable figure.
 
@@ -428,6 +468,7 @@ def main() -> None:
     failure_coherence_chart()
     suspension_screen_chart()
     participation_sensitivity_chart()
+    stop_loss_daily_close_chart()
     book_figure_18_recreated()
     book_excerpt_card(
         "09_book_excerpt_liquidity.png",

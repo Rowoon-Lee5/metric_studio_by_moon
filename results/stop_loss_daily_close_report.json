@@ -1,0 +1,64 @@
+{
+  "rule": "At a daily close below the loss threshold, exit at the next available daily close; cash is held until the next monthly formation date.",
+  "comparison": "Same selected small-cap holdings, equal-weighted across positions with both formation and next-formation adjusted closes observed.",
+  "summary": [
+    {
+      "months": 317,
+      "cagr": 0.4733653939139053,
+      "mdd": -0.49794693705519866,
+      "t_stat": 6.280039489388348,
+      "mean_monthly_return": 0.038190557397859974,
+      "rule": "hold",
+      "threshold": NaN,
+      "stop_hit_rate": NaN,
+      "triggered_positions": NaN,
+      "observed_positions": 15464,
+      "recovered_by_month_end_rate": NaN
+    },
+    {
+      "months": 317,
+      "cagr": 0.4748317383572993,
+      "mdd": -0.42235567524609996,
+      "t_stat": 6.856314827389022,
+      "mean_monthly_return": 0.03704150688412906,
+      "rule": "stop_10",
+      "threshold": 0.1,
+      "stop_hit_rate": 0.35404811174340406,
+      "triggered_positions": 5475.0,
+      "observed_positions": 15464,
+      "recovered_by_month_end_rate": 0.41899543378995435
+    },
+    {
+      "months": 317,
+      "cagr": 0.47864804609128964,
+      "mdd": -0.49816294958469354,
+      "t_stat": 6.497732936432339,
+      "mean_monthly_return": 0.03804246920118635,
+      "rule": "stop_20",
+      "threshold": 0.2,
+      "stop_hit_rate": 0.16282979824107605,
+      "triggered_positions": 2518.0,
+      "observed_positions": 15464,
+      "recovered_by_month_end_rate": 0.3995234312946783
+    },
+    {
+      "months": 317,
+      "cagr": 0.46532266492183294,
+      "mdd": -0.5089153893532457,
+      "t_stat": 6.2156247128790865,
+      "mean_monthly_return": 0.037694549478881685,
+      "rule": "stop_30",
+      "threshold": 0.3,
+      "stop_hit_rate": 0.07837558199689601,
+      "triggered_positions": 1212.0,
+      "observed_positions": 15464,
+      "recovered_by_month_end_rate": 0.37293729372937295
+    }
+  ],
+  "limits": [
+    "This is an end-of-day adjusted-close proxy, not an intraday stop-order backtest.",
+    "The raw panel has no intraday low/high, bid-ask spread, order-book depth, or realised fill records.",
+    "The conditional sample excludes holdings without both endpoint adjusted closes and therefore does not settle terminal-event cash values.",
+    "Transaction costs and capacity are held outside this overlay comparison; it tests the timing rule, not executable net alpha."
+  ]
+}
