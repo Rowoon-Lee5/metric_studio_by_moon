@@ -20,7 +20,7 @@ POSTS = {
     "01_알파는_봉우리인가_대륙인가.md": {
         "title": "# 『문병로 교수의 메트릭 스튜디오』 2장 「시장관찰」 1. 알파는 단일 최적값인가, 안정적인 구간인가",
         "min_words": 4000,
-        "anchors": ["금융인공지능 프로젝트", "내가 만든 실험", "손절매", "GitHub에서 확인할 수 있는 것"],
+        "anchors": ["금융인공지능 프로젝트", "내가 만든 실험", "4-1. 전략 자체에서 바꾼 것", "4-2. 비용과 체결은 어떻게 넣었는가", "4-3. 무엇을 통과해야 남는 조합으로 볼 것인가", "GitHub에서 확인할 수 있는 것"],
         "allowed_images": {
             "book_figure_18_liquidity_universe_recreated.png",
             "11_participation_sensitivity.png",
@@ -56,6 +56,15 @@ FORBIDDEN_IMAGES = {
     "01_robustness_map.png",
 }
 
+# Expressions explicitly rejected in editorial review.  These checks protect
+# the agreed scope of post 1: liquidity/capacity, not a stop-loss sidebar.
+FORBIDDEN_TEXT = {
+    "01_알파는_봉우리인가_대륙인가.md": [
+        "결과를 신뢰하지 않기 위해 다시 한 일",
+        "손절매는 손실을 막는 규칙인가",
+    ],
+}
+
 
 def words(text: str) -> int:
     return len(re.findall(r"\S+", text))
@@ -87,6 +96,9 @@ def check_post(filename: str, rule: dict[str, object]) -> list[str]:
     extra = used - set(rule["allowed_images"])
     if extra:
         errors.append("허용 목록 밖 이미지: " + ", ".join(sorted(extra)))
+    for phrase in FORBIDDEN_TEXT.get(filename, []):
+        if phrase in text:
+            errors.append(f"제외하기로 한 문구가 다시 들어감: {phrase}")
     return errors
 
 
