@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 
 from panel_integrity import audit_dict, quarantine_reentries, return_over_months
+from suspension_data import read_monthly_suspensions
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -37,10 +38,18 @@ def prepare() -> tuple[pd.DataFrame, dict]:
     price = pd.read_pickle(OUT / "monthly_price_adv_panel.pkl").sort_values(["ticker", "date"])
     before = len(price)
     price, breaks = quarantine_reentries(price)
-    mcap = pd.read_pickle(OUT / "monthly_mcap_panel.pkl")
+    price = price.copy()
+    price["ticker"] = price.ticker.astype(str).str.zfill(6)
+    mcap = pd.read_pickle(OUT / "monthly_mcap_panel.pkl").copy()
+    mcap["ticker"] = mcap.ticker.astype(str).str.zfill(6)
     x = price.merge(mcap, on=["date", "ticker"], how="left")
+    suspended = read_monthly_suspensions(x)
+    x = x.merge(suspended[["date", "ticker"]].assign(suspended=True), on=["date", "ticker"], how="left")
+    x["suspended"] = x.suspended.fillna(False).astype(bool)
     x["next"] = return_over_months(x, 1)
-    return x, audit_dict(breaks, before, len(price))
+    integrity = audit_dict(breaks, before, len(price))
+    integrity["suspension_flag_rows"] = int(len(suspended))
+    return x, integrity
 
 
 def cost_rate(day: pd.DataFrame) -> tuple[np.ndarray, float]:
@@ -72,7 +81,7 @@ def main() -> None:
         # Formation never uses the next-month observation. Missing endpoint
         # returns receive the same neutral cash convention as closure_audits.
         eligible = day.dropna(subset=["adv_21d", "mcap", "price"])
-        eligible = eligible[(eligible.adv_21d > 0) & (eligible.mcap > 0)]
+        eligible = eligible[(eligible.adv_21d > 0) & (eligible.mcap > 0) & (~eligible.suspended)]
         if len(eligible) < N:
             continue
         liquid = eligible.nlargest(max(N, int(len(eligible) * PCT)), "adv_21d")

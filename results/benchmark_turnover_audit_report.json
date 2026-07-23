@@ -5,25 +5,26 @@
     "non_contiguous_links": 21,
     "tickers_with_non_contiguous_links": 19,
     "rows_before_reentry_quarantine": 593279,
-    "rows_after_reentry_quarantine": 591515
+    "rows_after_reentry_quarantine": 591515,
+    "suspension_flag_rows": 13385
   },
   "months": 318,
   "turnover": {
-    "mean_drift_adjusted_one_way_turnover": 0.381665400748002,
-    "median_drift_adjusted_one_way_turnover": 0.37468194421455436
+    "mean_drift_adjusted_one_way_turnover": 0.3932301525323387,
+    "median_drift_adjusted_one_way_turnover": 0.3852481815383476
   },
   "performance": {
-    "full_monthly_turnover_net_cagr": 0.3870565921915816,
-    "drift_adjusted_turnover_net_cagr": 0.4112196339692966,
-    "liquidity_matched_equal_weight_cagr": 0.0874809013619422,
-    "drift_adjusted_excess_mean_monthly": 0.023682622912416143,
-    "drift_adjusted_excess_t_stat": 5.550337795626387,
-    "drift_adjusted_relative_cagr": 0.297696016731797
+    "full_monthly_turnover_net_cagr": 0.4656719946713779,
+    "drift_adjusted_turnover_net_cagr": 0.49063229050077983,
+    "liquidity_matched_equal_weight_cagr": 0.09316086394435885,
+    "drift_adjusted_excess_mean_monthly": 0.028088698962326072,
+    "drift_adjusted_excess_t_stat": 6.633791824867071,
+    "drift_adjusted_relative_cagr": 0.36359829524289644
   },
   "single_factor_decomposition": {
-    "monthly_intercept": 0.025381697855001262,
-    "intercept_t_stat": 6.041508406182109,
-    "liquidity_matched_beta": 0.8304556754081994
+    "monthly_intercept": 0.029518479034466152,
+    "intercept_t_stat": 7.043215830349899,
+    "liquidity_matched_beta": 0.8636609389623313
   },
   "interpretation": "The benchmark is a liquidity-matched equal-weight universe, not a factor model. A positive residual is evidence against a pure broad-liquidity-market explanation, not proof of a priced alpha."
 }
