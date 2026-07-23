@@ -152,7 +152,7 @@ def topology_map(rows: list[dict[str, str]]) -> None:
 
 
 def robustness_summary_chart(rows: list[dict[str, str]]) -> None:
-    """Replace the dense parameter grid with a conventional, readable chart."""
+    """A plain chart: interpretation belongs in the body text, not the image."""
     robust = [row for row in rows if row["robust"] == "True"]
     signal_order = ["reversal_1m", "momentum_6m", "low_volatility", "small_cap"]
     total_by_signal = {signal: sum(row["signal"] == signal for row in robust) for signal in signal_order}
@@ -162,41 +162,38 @@ def robustness_summary_chart(rows: list[dict[str, str]]) -> None:
         for signal in ["low_volatility", "small_cap"]
     }
 
-    image = Image.new("RGB", (1600, 980), "white")
+    image = Image.new("RGB", (1600, 900), "white")
     draw = ImageDraw.Draw(image)
     navy, muted, grid = "#1F2937", "#667085", "#E5E7EB"
     lowvol, smallcap, neutral = "#247BA0", "#E76F51", "#B7C0CC"
-    draw.text((70, 42), "조건을 바꾼 뒤에도 남은 전략은 저변동성에 집중됐다", fill=navy, font=font(32, True))
-    draw.text((70, 86), "각 막대는 비용·유동성·종목 수·운용 규모를 바꾼 뒤 네 기준을 모두 통과한 전략 조합 수다.", fill=muted, font=font(18))
-    draw.text((70, 116), "통과 기준: 비용 차감 CAGR > 0 · t > 1.96 · MDD > -60% · 평균 체결률 ≥ 80%", fill=muted, font=font(16))
 
-    # Panel A: one familiar horizontal bar chart.
-    draw.text((70, 184), "신호별 안정적인 조합 수", fill=navy, font=font(23, True))
-    draw.text((70, 214), "각 신호당 총 432개 후보 중 통과한 조합", fill=muted, font=font(16))
+    # Familiar horizontal bar chart.
+    draw.text((70, 45), "신호별 안정적인 조합 수", fill=navy, font=font(28, True))
+    draw.text((70, 82), "조합 수", fill=muted, font=font(16))
     x0, max_width, max_value = 300, 740, 60
     for tick in range(0, 61, 10):
         x = x0 + int(max_width * tick / max_value)
-        draw.line((x, 260, x, 585), fill=grid, width=1)
+        draw.line((x, 125, x, 405), fill=grid, width=1)
         box = draw.textbbox((0, 0), str(tick), font=font(14))
-        draw.text((x - (box[2] - box[0]) / 2, 592), str(tick), fill=muted, font=font(14))
+        draw.text((x - (box[2] - box[0]) / 2, 412), str(tick), fill=muted, font=font(14))
     for index, signal in enumerate(signal_order):
-        y = 285 + index * 72
+        y = 145 + index * 58
         label = LABELS[signal]
-        draw.text((70, y + 13), label, fill=navy, font=font(19, True))
+        draw.text((70, y + 9), label, fill=navy, font=font(18, True))
         value = total_by_signal[signal]
         color = lowvol if signal == "low_volatility" else smallcap if signal == "small_cap" else neutral
         width = int(max_width * value / max_value)
         if width:
-            draw.rounded_rectangle((x0, y, x0 + width, y + 42), radius=6, fill=color)
+            draw.rectangle((x0, y, x0 + width, y + 34), fill=color)
         else:
-            draw.line((x0, y + 21, x0 + 7, y + 21), fill=neutral, width=3)
-        draw.text((x0 + max(width, 10) + 14, y + 8), f"{value}개", fill=navy, font=font(19, True))
+            draw.line((x0, y + 17, x0 + 7, y + 17), fill=neutral, width=3)
+        draw.text((x0 + max(width, 10) + 14, y + 4), str(value), fill=navy, font=font(18, True))
 
-    # Panel B: ordinary grouped bars by liquidity bucket.
-    panel_y = 690
-    draw.text((70, panel_y), "남은 조합은 어느 유동성 범위에 있었나", fill=navy, font=font(23, True))
-    draw.text((70, panel_y + 30), "저변동성은 상위 60~90%, 소형주는 상위 80~90%에서만 통과 조합이 남았다.", fill=muted, font=font(16))
-    left, top, bottom, right = 160, 770, 925, 1500
+    # Ordinary grouped bars by liquidity bucket.
+    panel_y = 500
+    draw.text((70, panel_y), "유동성 유니버스별 안정적인 조합 수", fill=navy, font=font(28, True))
+    draw.text((70, panel_y + 38), "조합 수", fill=muted, font=font(16))
+    left, top, bottom, right = 160, 590, 820, 1500
     for tick in range(0, 21, 5):
         y = bottom - int((bottom - top) * tick / 20)
         draw.line((left, y, right, y), fill=grid, width=1)
@@ -213,11 +210,10 @@ def robustness_summary_chart(rows: list[dict[str, str]]) -> None:
         label = "전체" if pct == 1.0 else f"{int(pct * 100)}%"
         box = draw.textbbox((0, 0), label, font=font(14))
         draw.text((center - (box[2] - box[0]) / 2, bottom + 15), label, fill=muted, font=font(14))
-    draw.rectangle((1160, 690, 1178, 708), fill=lowvol)
-    draw.text((1188, 688), "저변동성", fill=navy, font=font(15))
-    draw.rectangle((1320, 690, 1338, 708), fill=smallcap)
-    draw.text((1348, 688), "소형주", fill=navy, font=font(15))
-    draw.text((70, 950), "0은 해당 유동성 구간에서 네 기준을 모두 통과한 조합이 없었다는 뜻이다. 수익률이나 종목 수를 뜻하지 않는다.", fill=muted, font=font(15))
+    draw.rectangle((1150, 510, 1168, 528), fill=lowvol)
+    draw.text((1178, 508), "저변동성", fill=navy, font=font(15))
+    draw.rectangle((1320, 510, 1338, 528), fill=smallcap)
+    draw.text((1348, 508), "소형주", fill=navy, font=font(15))
     save_png(image, "01_robustness_map.png")
 
 
@@ -417,10 +413,10 @@ def suspension_screen_chart() -> None:
 def participation_sensitivity_chart() -> None:
     report = json.loads((RESULTS / "participation_sensitivity_report.json").read_text(encoding="utf-8"))
     rows = report["summary"]
-    image = Image.new("RGB", (1200, 650), "white")
+    image = Image.new("RGB", (1200, 620), "white")
     draw = ImageDraw.Draw(image)
-    draw.text((60, 32), "참여율을 바꿔도 100억 원 조건은 살아나지 않았다", fill="#1F2937", font=font(25, True))
-    draw.text((60, 64), "종목당 최대 주문량: 21일 평균 거래대금의 2.5% · 5.0% · 10.0%", fill="#6B7280", font=font(15))
+    draw.text((60, 38), "종목당 최대 참여율별 안정적인 조합 수", fill="#1F2937", font=font(27, True))
+    draw.text((60, 78), "조합 수", fill="#6B7280", font=font(16))
     base_y, scale = 470, 4.5
     for tick in range(0, 81, 20):
         y = base_y - tick * scale
@@ -432,17 +428,15 @@ def participation_sensitivity_chart() -> None:
         low = int(row["low_volatility_nodes"])
         small = int(row["small_cap_nodes"])
         low_h, small_h = int(low * scale), int(small * scale)
-        draw.rounded_rectangle((x, base_y - low_h, x + 135, base_y), radius=5, fill="#247BA0")
+        draw.rectangle((x, base_y - low_h, x + 135, base_y), fill="#247BA0")
         draw.rectangle((x, base_y - low_h - small_h, x + 135, base_y - low_h), fill="#E76F51")
         draw.text((x + 41, base_y - low_h - small_h - 34), str(low + small), fill="#1F2937", font=font(21, True))
         draw.text((x + 35, base_y + 22), labels[index], fill="#1F2937", font=font(17, True))
-        draw.text((x + 18, base_y + 52), "최대 참여율", fill="#6B7280", font=font(13))
-    draw.rectangle((740, 150, 758, 168), fill="#247BA0")
-    draw.text((770, 148), "저변동성", fill="#374151", font=font(15))
-    draw.rectangle((900, 150, 918, 168), fill="#E76F51")
-    draw.text((930, 148), "소형주", fill="#374151", font=font(15))
-    draw.line((60, 545, 1140, 545), fill="#D1D5DB", width=1)
-    draw.text((60, 575), "세 가정 모두에서 100억 원 조건의 안정적인 조합은 0개였다. 이 그림은 실제 호가 체결을 관측한 결과가 아니라 참여율 가정의 민감도 분석이다.", fill="#374151", font=font(14))
+    draw.rectangle((740, 120, 758, 138), fill="#247BA0")
+    draw.text((770, 118), "저변동성", fill="#374151", font=font(15))
+    draw.rectangle((900, 120, 918, 138), fill="#E76F51")
+    draw.text((930, 118), "소형주", fill="#374151", font=font(15))
+    draw.text((500, 555), "종목당 최대 참여율", fill="#6B7280", font=font(15))
     save_png(image, "11_participation_sensitivity.png")
 
 
