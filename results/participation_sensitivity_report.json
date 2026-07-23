@@ -8,32 +8,36 @@
   "summary": [
     {
       "participation": 0.025,
-      "robust_nodes": 53,
-      "low_volatility_nodes": 40,
-      "small_cap_nodes": 13,
-      "robust_at_100m": 50,
-      "robust_at_1bn": 3,
+      "robust_nodes": 110,
+      "low_volatility_nodes": 42,
+      "small_cap_nodes": 68,
+      "robust_at_100m": 91,
+      "robust_at_1bn": 19,
       "robust_at_10bn": 0
     },
     {
       "participation": 0.05,
-      "robust_nodes": 64,
-      "low_volatility_nodes": 52,
-      "small_cap_nodes": 12,
-      "robust_at_100m": 56,
-      "robust_at_1bn": 8,
+      "robust_nodes": 127,
+      "low_volatility_nodes": 55,
+      "small_cap_nodes": 72,
+      "robust_at_100m": 95,
+      "robust_at_1bn": 32,
       "robust_at_10bn": 0
     },
     {
       "participation": 0.1,
-      "robust_nodes": 75,
-      "low_volatility_nodes": 55,
-      "small_cap_nodes": 20,
-      "robust_at_100m": 60,
-      "robust_at_1bn": 15,
-      "robust_at_10bn": 0
+      "robust_nodes": 142,
+      "low_volatility_nodes": 59,
+      "small_cap_nodes": 83,
+      "robust_at_100m": 98,
+      "robust_at_1bn": 42,
+      "robust_at_10bn": 2
     }
   ],
+  "selection_screen": {
+    "rule": "At formation, exclude supplied DataGuide statuses other than 정상.",
+    "flag_rows": 13385
+  },
   "panel_integrity": {
     "max_allowed_monthly_gap_days": 40,
     "non_contiguous_links": 21,

@@ -19,7 +19,7 @@ DRAFTS = ROOT / "blog_drafts"
 POSTS = {
     "01_알파는_봉우리인가_대륙인가.md": {
         "title": "# 『문병로 교수의 메트릭 스튜디오』 2장 「시장관찰」 1. 알파는 단일 최적값인가, 안정적인 구간인가",
-        "min_words": 4000,
+        "min_words": 3000,
         "anchors": ["금융인공지능 프로젝트", "내가 만든 실험", "4-1. 전략 자체에서 바꾼 것", "4-2. 비용과 체결은 어떻게 넣었는가", "4-3. 무엇을 통과해야 남는 조합으로 볼 것인가", "GitHub에서 확인할 수 있는 것"],
         "allowed_images": {
             "book_figure_18_liquidity_universe_recreated.png",

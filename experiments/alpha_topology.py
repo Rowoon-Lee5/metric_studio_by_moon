@@ -12,6 +12,7 @@ from statistics import NormalDist
 import numpy as np
 import pandas as pd
 from panel_integrity import audit_dict, quarantine_reentries, return_over_months, trailing_return
+from suspension_data import read_monthly_suspensions
 
 ROOT=Path(__file__).resolve().parents[1]; OUT=ROOT/'results'
 PCTS=np.arange(.2,1.01,.1); NS=[10,20,30,50]; AUMS=[1e8,1e9,1e10]; COSTS=[.5,1.,1.5,2.]
@@ -42,7 +43,12 @@ def components(nodes):
 def main():
     x=pd.read_pickle(OUT/'monthly_price_adv_panel.pkl').sort_values(['ticker','date']).copy()
     before=len(x); x, breaks=quarantine_reentries(x); integrity=audit_dict(breaks,before,len(x))
-    mc=pd.read_pickle(OUT/'monthly_mcap_panel.pkl'); x=x.merge(mc,on=['date','ticker'],how='left')
+    x['ticker']=x.ticker.astype(str).str.zfill(6)
+    mc=pd.read_pickle(OUT/'monthly_mcap_panel.pkl').copy(); mc['ticker']=mc.ticker.astype(str).str.zfill(6); x=x.merge(mc,on=['date','ticker'],how='left')
+    suspended=read_monthly_suspensions(x)
+    suspended.to_csv(OUT/'monthly_suspension_flags.csv',index=False,encoding='utf-8-sig')
+    x=x.merge(suspended[['date','ticker']].assign(suspended=True),on=['date','ticker'],how='left')
+    x['suspended']=x.suspended.fillna(False).astype(bool)
     x['next']=return_over_months(x,1); x['r1']=trailing_return(x,1); x['r6']=trailing_return(x,6); x['vol12']=x.groupby('ticker').r1.transform(lambda s:s.rolling(12,min_periods=8).std())
     specs={'reversal_1m':('r1',True),'momentum_6m':('r6',False),'low_volatility':('vol12',True),'small_cap':('mcap',True)}
     paths={}; rows=[]
@@ -52,7 +58,7 @@ def main():
         # For the unresolved final endpoint, the base run assigns a zero return
         # (cash at the last observed adjusted price); endpoint-loss sensitivity
         # is reported separately in closure_audits.py.
-        d=d.dropna(subset=['adv_21d','r1','r6','vol12','mcap']); d=d[(d.adv_21d>0)&(d.price>0)&(d.mcap>0)]
+        d=d.dropna(subset=['adv_21d','r1','r6','vol12','mcap']); d=d[(d.adv_21d>0)&(d.price>0)&(d.mcap>0)&(~d.suspended)]
         for signal,(col,ascending) in specs.items():
             for p in PCTS:
                 u=d.nlargest(max(max(NS),int(len(d)*p)),'adv_21d')
@@ -83,6 +89,6 @@ def main():
         key=node_key(*k)
         monthly.extend({'date':d,'key':key,'net_return':r} for d,r in zip(values['dates'],values['returns']))
     pd.DataFrame(monthly).to_csv(OUT/'alpha_topology_monthly_returns.csv',index=False,encoding='utf-8-sig')
-    report={'definition':'A robust node has positive net CAGR, t-stat>1.96, MDD>-60% and mean order fill>=80%. A continent is a connected component under one-step parameter perturbations.','grid':{'signals':list(specs),'universe_pct':PCTS.tolist(),'holdings':NS,'aum_krw':AUMS,'cost_multipliers':COSTS},'nodes_total':int(len(summary)),'robust_nodes':int(summary.robust.sum()),'continents':records,'panel_integrity':integrity,'warning':'This is a topology diagnostic, not a multiple-testing correction. Formal reality-check/permutation testing remains a separate gate.'}
+    report={'definition':'A robust node has positive net CAGR, t-stat>1.96, MDD>-60% and mean order fill>=80%. A continent is a connected component under one-step parameter perturbations.','grid':{'signals':list(specs),'universe_pct':PCTS.tolist(),'holdings':NS,'aum_krw':AUMS,'cost_multipliers':COSTS},'selection_screen':{'rule':'At formation, exclude any stock whose supplied DataGuide suspension status is not 정상.','flag_rows':int(len(suspended)),'flagged_tickers':int(suspended.ticker.nunique()) if len(suspended) else 0},'nodes_total':int(len(summary)),'robust_nodes':int(summary.robust.sum()),'continents':records,'panel_integrity':integrity,'warning':'This is a topology diagnostic, not a multiple-testing correction. Formal reality-check/permutation testing remains a separate gate.'}
     (OUT/'alpha_topology_report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8'); print(json.dumps(report,ensure_ascii=False,indent=2))
 if __name__=='__main__':main()

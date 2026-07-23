@@ -36,24 +36,29 @@
       2.0
     ]
   },
+  "selection_screen": {
+    "rule": "At formation, exclude any stock whose supplied DataGuide suspension status is not 정상.",
+    "flag_rows": 13385,
+    "flagged_tickers": 1908
+  },
   "nodes_total": 1728,
-  "robust_nodes": 64,
+  "robust_nodes": 127,
   "continents": [
     {
       "continent_id": 1,
-      "nodes": 52,
-      "signals": "low_volatility",
-      "mean_net_cagr": 0.06587119446897115,
-      "min_net_cagr": 0.050644529604970234,
+      "nodes": 72,
+      "signals": "small_cap",
+      "mean_net_cagr": 0.3517297754966903,
+      "min_net_cagr": 0.24219489196231914,
       "max_cost_multiplier": 2.0,
       "aum_range": "100000000-1000000000"
     },
     {
       "continent_id": 2,
-      "nodes": 12,
-      "signals": "small_cap",
-      "mean_net_cagr": 0.3212692790307609,
-      "min_net_cagr": 0.24103425368108589,
+      "nodes": 55,
+      "signals": "low_volatility",
+      "mean_net_cagr": 0.06595215677425767,
+      "min_net_cagr": 0.049521424203296194,
       "max_cost_multiplier": 2.0,
       "aum_range": "100000000-1000000000"
     }

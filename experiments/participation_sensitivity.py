@@ -16,6 +16,7 @@ import numpy as np
 import pandas as pd
 
 from panel_integrity import audit_dict, quarantine_reentries, return_over_months, trailing_return
+from suspension_data import read_monthly_suspensions
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,8 +43,13 @@ def main() -> None:
     before = len(panel)
     panel, breaks = quarantine_reentries(panel)
     integrity = audit_dict(breaks, before, len(panel))
-    mcap = pd.read_pickle(OUT / "monthly_mcap_panel.pkl")
+    panel["ticker"] = panel.ticker.astype(str).str.zfill(6)
+    mcap = pd.read_pickle(OUT / "monthly_mcap_panel.pkl").copy()
+    mcap["ticker"] = mcap.ticker.astype(str).str.zfill(6)
     panel = panel.merge(mcap, on=["date", "ticker"], how="left")
+    suspended = read_monthly_suspensions(panel)
+    panel = panel.merge(suspended[["date", "ticker"]].assign(suspended=True), on=["date", "ticker"], how="left")
+    panel["suspended"] = panel.suspended.fillna(False).astype(bool)
     panel["next"] = return_over_months(panel, 1)
     panel["r1"] = trailing_return(panel, 1)
     panel["r6"] = trailing_return(panel, 6)
@@ -57,7 +63,7 @@ def main() -> None:
     paths: dict[tuple, dict[str, list[float]]] = {}
     for _, month in panel.groupby("date"):
         month = month.dropna(subset=["adv_21d", "r1", "r6", "vol12", "mcap"])
-        month = month[(month.adv_21d > 0) & (month.price > 0) & (month.mcap > 0)]
+        month = month[(month.adv_21d > 0) & (month.price > 0) & (month.mcap > 0) & (~month.suspended)]
         for signal, (column, ascending) in specs.items():
             for pct in PCTS:
                 universe = month.nlargest(max(max(NS), int(len(month) * pct)), "adv_21d")
@@ -130,6 +136,7 @@ def main() -> None:
         "assumption": "Each name can trade at most participation × 21-day ADV at the monthly rebalance; unfilled capital remains cash.",
         "participations": PARTICIPATIONS,
         "summary": summary,
+        "selection_screen": {"rule": "At formation, exclude supplied DataGuide statuses other than 정상.", "flag_rows": int(len(suspended))},
         "panel_integrity": integrity,
         "warning": "This is an execution-assumption sensitivity, not observed order-book execution or a validation of the impact function.",
     }
