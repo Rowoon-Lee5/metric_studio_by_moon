@@ -22,7 +22,8 @@ packet.IMAGE_MAP = {
     "01_알파는_봉우리인가_대륙인가.md": [
         ("book_figure_18_liquidity_universe_recreated.png", "책 2장 그림 18. 유동성 유니버스 제한에 따른 포트폴리오 수익률 변화 추이(사진 기준 재작성)"),
         ("11_participation_sensitivity.png", "그림 2. 종목당 최대 참여율 가정에 따른 안정적인 조합 수"),
-        ("01_robustness_map.png", "그림 1. 유동성·비용 조건별로 살아남은 전략 조합"),
+        ("01a_signal_stability.png", "그림 1. 신호별 안정적인 조합 수"),
+        ("01b_liquidity_stability.png", "그림 2. 유동성 유니버스별 안정적인 조합 수"),
     ],
     "02_거래회전율은_관심이_아니었다.md": [
         ("03_observed_news_attention.png", "그림 1. 원천 뉴스량별 모멘텀 Rank IC"),
