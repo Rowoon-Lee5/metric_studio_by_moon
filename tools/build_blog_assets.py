@@ -164,9 +164,9 @@ def robustness_summary_chart(rows: list[dict[str, str]]) -> None:
 
     image = Image.new("RGB", (1600, 900), "white")
     draw = ImageDraw.Draw(image)
-    # Blog palette: navy as the primary colour, muted wine as the only accent.
-    navy, muted, grid = "#17365D", "#6F7176", "#D9D3CC"
-    lowvol, smallcap, neutral = "#17365D", "#9A4E52", "#B7B1A8"
+    # Soft navy and dusty rose: readable in Word without looking like a dashboard.
+    navy, muted, grid = "#496A98", "#7A7F89", "#E7E1D9"
+    lowvol, smallcap, neutral = "#6E88AE", "#C58B94", "#C9C5C0"
 
     # Familiar horizontal bar chart.
     draw.text((70, 45), "신호별 안정적인 조합 수", fill=navy, font=font(28, True))
@@ -431,13 +431,13 @@ def participation_sensitivity_chart() -> None:
         low = int(row["low_volatility_nodes"])
         small = int(row["small_cap_nodes"])
         low_h, small_h = int(low * scale), int(small * scale)
-        draw.rectangle((x, base_y - low_h, x + 135, base_y), fill="#17365D")
-        draw.rectangle((x, base_y - low_h - small_h, x + 135, base_y - low_h), fill="#9A4E52")
+        draw.rectangle((x, base_y - low_h, x + 135, base_y), fill="#6E88AE")
+        draw.rectangle((x, base_y - low_h - small_h, x + 135, base_y - low_h), fill="#C58B94")
         draw.text((x + 41, base_y - low_h - small_h - 34), str(low + small), fill="#1F2937", font=font(21, True))
         draw.text((x + 35, base_y + 22), labels[index], fill="#1F2937", font=font(17, True))
-    draw.rectangle((740, 120, 758, 138), fill="#17365D")
+    draw.rectangle((740, 120, 758, 138), fill="#6E88AE")
     draw.text((770, 118), "저변동성", fill="#374151", font=font(15))
-    draw.rectangle((900, 120, 918, 138), fill="#9A4E52")
+    draw.rectangle((900, 120, 918, 138), fill="#C58B94")
     draw.text((930, 118), "소형주", fill="#374151", font=font(15))
     draw.text((500, 555), "종목당 최대 참여율", fill="#6B7280", font=font(15))
     save_png(image, "11_participation_sensitivity.png")
@@ -494,8 +494,8 @@ def book_figure_18_recreated() -> None:
     values = [28.0, 35.5, 41.5, 43.5, 50.5, 54.0, 62.5, 67.0, 65.7, 68.0]
     image = Image.new("RGB", (1800, 1120), "white")
     draw = ImageDraw.Draw(image)
-    navy, muted, grid = "#17365D", "#6F7176", "#D9D3CC"
-    draw.rounded_rectangle((68, 54, 272, 112), radius=8, fill="#304A70")
+    navy, muted, grid = "#496A98", "#7A7F89", "#E7E1D9"
+    draw.rounded_rectangle((68, 54, 272, 112), radius=8, fill="#91A6C5")
     draw.text((92, 67), "그림 18", fill="white", font=font(24, True))
     draw.text((306, 61), "유동성으로 인한 유니버스 제한에 따른 포트폴리오 수익률 변화 추이", fill="#111827", font=font(32, True))
     left, top, right, bottom = 170, 190, 1660, 840
