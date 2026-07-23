@@ -416,30 +416,37 @@ def suspension_screen_chart() -> None:
 def participation_sensitivity_chart() -> None:
     report = json.loads((RESULTS / "participation_sensitivity_report.json").read_text(encoding="utf-8"))
     rows = report["summary"]
-    image = Image.new("RGB", (1200, 620), "white")
+    image = Image.new("RGB", (1200, 640), "white")
     draw = ImageDraw.Draw(image)
-    draw.text((60, 38), "종목당 최대 참여율별 안정적인 조합 수", fill="#1F2937", font=font(27, True))
-    draw.text((60, 78), "조합 수", fill="#6B7280", font=font(16))
-    base_y, scale = 470, 4.5
-    for tick in range(0, 81, 20):
+    draw.text((80, 42), "참여율 가정에 따라 남는 조합 수", fill="#26313D", font=font(25, True))
+    draw.text((80, 80), "거래정지 상태 종목 제외 후", fill="#788391", font=font(15))
+    base_y, top_y = 500, 135
+    y_max = 100
+    scale = (base_y - top_y) / y_max
+    for tick in range(0, y_max + 1, 20):
         y = base_y - tick * scale
-        draw.line((130, y, 1130, y), fill="#E5E7EB", width=1)
-        draw.text((72, y - 8), str(tick), fill="#6B7280", font=font(13))
+        draw.line((145, y, 1120, y), fill="#E3E7EC", width=1)
+        draw.text((95, y - 9), str(tick), fill="#788391", font=font(13))
     labels = ["2.5%", "5.0%", "10.0%"]
     for index, row in enumerate(rows):
-        x = 260 + index * 300
+        center_x = 330 + index * 320
         low = int(row["low_volatility_nodes"])
         small = int(row["small_cap_nodes"])
-        low_h, small_h = int(low * scale), int(small * scale)
-        draw.rectangle((x, base_y - low_h, x + 135, base_y), fill="#6E88AE")
-        draw.rectangle((x, base_y - low_h - small_h, x + 135, base_y - low_h), fill="#C58B94")
-        draw.text((x + 41, base_y - low_h - small_h - 34), str(low + small), fill="#1F2937", font=font(21, True))
-        draw.text((x + 35, base_y + 22), labels[index], fill="#1F2937", font=font(17, True))
-    draw.rectangle((740, 120, 758, 138), fill="#6E88AE")
-    draw.text((770, 118), "저변동성", fill="#374151", font=font(15))
-    draw.rectangle((900, 120, 918, 138), fill="#C58B94")
-    draw.text((930, 118), "소형주", fill="#374151", font=font(15))
-    draw.text((500, 555), "종목당 최대 참여율", fill="#6B7280", font=font(15))
+        bar_width, gap = 70, 18
+        low_x = center_x - bar_width - gap // 2
+        small_x = center_x + gap // 2
+        low_y = base_y - int(low * scale)
+        small_y = base_y - int(small * scale)
+        draw.rectangle((low_x, low_y, low_x + bar_width, base_y), fill="#7188A6")
+        draw.rectangle((small_x, small_y, small_x + bar_width, base_y), fill="#B39B78")
+        draw.text((low_x + 25, low_y - 28), str(low), fill="#3B4D63", font=font(16, True))
+        draw.text((small_x + 25, small_y - 28), str(small), fill="#68573F", font=font(16, True))
+        draw.text((center_x - 20, base_y + 22), labels[index], fill="#26313D", font=font(17, True))
+    draw.rectangle((760, 82, 776, 98), fill="#7188A6")
+    draw.text((788, 79), "저변동성", fill="#4D5B6D", font=font(15))
+    draw.rectangle((930, 82, 946, 98), fill="#B39B78")
+    draw.text((958, 79), "소형주", fill="#4D5B6D", font=font(15))
+    draw.text((520, 560), "종목당 최대 참여율", fill="#788391", font=font(15))
     save_png(image, "11_participation_sensitivity.png")
 
 

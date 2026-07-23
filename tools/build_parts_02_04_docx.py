@@ -37,8 +37,8 @@ IMAGE_MAP = {
 
 
 def set_font(run, size=11, bold=None, color=None, italic=None):
-    run.font.name = "Malgun Gothic"
-    run._element.rPr.rFonts.set(qn("w:eastAsia"), "Malgun Gothic")
+    run.font.name = "Noto Sans KR"
+    run._element.rPr.rFonts.set(qn("w:eastAsia"), "Noto Sans KR")
     run.font.size = Pt(size)
     if bold is not None:
         run.bold = bold
@@ -81,8 +81,8 @@ def style_document(doc, with_footer=True):
     section.footer_distance = Inches(0.492)
 
     normal = doc.styles["Normal"]
-    normal.font.name = "Malgun Gothic"
-    normal._element.rPr.rFonts.set(qn("w:eastAsia"), "Malgun Gothic")
+    normal.font.name = "Noto Sans KR"
+    normal._element.rPr.rFonts.set(qn("w:eastAsia"), "Noto Sans KR")
     normal.font.size = Pt(11)
     normal.paragraph_format.space_after = Pt(8)
     normal.paragraph_format.line_spacing = 1.333
@@ -93,8 +93,8 @@ def style_document(doc, with_footer=True):
         ("Heading 3", 12, RGBColor(31, 77, 120), 8, 4),
     ]:
         style = doc.styles[name]
-        style.font.name = "Malgun Gothic"
-        style._element.rPr.rFonts.set(qn("w:eastAsia"), "Malgun Gothic")
+        style.font.name = "Noto Sans KR"
+        style._element.rPr.rFonts.set(qn("w:eastAsia"), "Noto Sans KR")
         style.font.size = Pt(size)
         style.font.color.rgb = color
         style.font.bold = True
@@ -103,8 +103,8 @@ def style_document(doc, with_footer=True):
         style.paragraph_format.keep_with_next = True
 
     caption = doc.styles.add_style("Figure Caption", WD_STYLE_TYPE.PARAGRAPH)
-    caption.font.name = "Malgun Gothic"
-    caption._element.rPr.rFonts.set(qn("w:eastAsia"), "Malgun Gothic")
+    caption.font.name = "Noto Sans KR"
+    caption._element.rPr.rFonts.set(qn("w:eastAsia"), "Noto Sans KR")
     caption.font.size = Pt(9)
     caption.font.color.rgb = RGBColor(89, 89, 89)
     caption.paragraph_format.space_after = Pt(12)
@@ -220,14 +220,11 @@ def add_table(doc, rows):
 
 def add_sources(doc, lines, heading):
     doc.add_heading(heading, level=2)
-    for line in lines:
-        match = re.match(r"- \[(.*?)\]\((.*?)\)", line)
-        if match:
-            label, url = match.groups()
-            p = doc.add_paragraph(style="List Bullet")
-            p.paragraph_format.space_after = Pt(4)
-            r = p.add_run(f"{label}: {url}")
-            set_font(r, 9.5, color=(55, 55, 55))
+    for label, url in lines:
+        p = doc.add_paragraph(style="List Bullet")
+        p.paragraph_format.space_after = Pt(4)
+        r = p.add_run(f"{label}: {url}")
+        set_font(r, 9.5, color=(55, 55, 55))
 
 
 def add_article(doc, draft_name):
@@ -247,8 +244,15 @@ def add_article(doc, draft_name):
             i += 1
             while i < len(chunks):
                 candidate = chunks[i].strip()
+                if candidate.startswith("#"):
+                    break
                 if candidate.startswith("- ["):
-                    source_lines.append(candidate)
+                    match = re.match(r"- \[(.*?)\]\((.*?)\)", candidate)
+                    if match:
+                        source_lines.append(match.groups())
+                elif ": https://" in candidate:
+                    label, url = candidate.split(": https://", 1)
+                    source_lines.append((label.strip(), "https://" + url.strip()))
                 elif candidate.startswith("이 글은 투자 권유"):
                     disclaimer = candidate
                     break
@@ -263,6 +267,8 @@ def add_article(doc, draft_name):
             doc.add_heading(line[3:], level=2)
         elif line.startswith("### "):
             doc.add_heading(line[4:], level=3)
+        elif line.startswith("#### "):
+            doc.add_heading(line[5:], level=3)
         elif line.startswith("**[책 발췌 이미지") or line.startswith("**[이미지"):
             filename, caption = next(images)
             add_image(doc, filename, caption)
