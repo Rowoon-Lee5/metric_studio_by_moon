@@ -151,6 +151,76 @@ def topology_map(rows: list[dict[str, str]]) -> None:
     save_svg("01_robustness_map.svg", "".join(svg))
 
 
+def robustness_summary_chart(rows: list[dict[str, str]]) -> None:
+    """Replace the dense parameter grid with a conventional, readable chart."""
+    robust = [row for row in rows if row["robust"] == "True"]
+    signal_order = ["reversal_1m", "momentum_6m", "low_volatility", "small_cap"]
+    total_by_signal = {signal: sum(row["signal"] == signal for row in robust) for signal in signal_order}
+    liquidity_order = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    by_liquidity = {
+        signal: [sum(row["signal"] == signal and round(float(row["universe_pct"]), 1) == pct for row in robust) for pct in liquidity_order]
+        for signal in ["low_volatility", "small_cap"]
+    }
+
+    image = Image.new("RGB", (1600, 980), "white")
+    draw = ImageDraw.Draw(image)
+    navy, muted, grid = "#1F2937", "#667085", "#E5E7EB"
+    lowvol, smallcap, neutral = "#247BA0", "#E76F51", "#B7C0CC"
+    draw.text((70, 42), "조건을 바꾼 뒤에도 남은 전략은 저변동성에 집중됐다", fill=navy, font=font(32, True))
+    draw.text((70, 86), "각 막대는 비용·유동성·종목 수·운용 규모를 바꾼 뒤 네 기준을 모두 통과한 전략 조합 수다.", fill=muted, font=font(18))
+    draw.text((70, 116), "통과 기준: 비용 차감 CAGR > 0 · t > 1.96 · MDD > -60% · 평균 체결률 ≥ 80%", fill=muted, font=font(16))
+
+    # Panel A: one familiar horizontal bar chart.
+    draw.text((70, 184), "신호별 안정적인 조합 수", fill=navy, font=font(23, True))
+    draw.text((70, 214), "각 신호당 총 432개 후보 중 통과한 조합", fill=muted, font=font(16))
+    x0, max_width, max_value = 300, 740, 60
+    for tick in range(0, 61, 10):
+        x = x0 + int(max_width * tick / max_value)
+        draw.line((x, 260, x, 585), fill=grid, width=1)
+        box = draw.textbbox((0, 0), str(tick), font=font(14))
+        draw.text((x - (box[2] - box[0]) / 2, 592), str(tick), fill=muted, font=font(14))
+    for index, signal in enumerate(signal_order):
+        y = 285 + index * 72
+        label = LABELS[signal]
+        draw.text((70, y + 13), label, fill=navy, font=font(19, True))
+        value = total_by_signal[signal]
+        color = lowvol if signal == "low_volatility" else smallcap if signal == "small_cap" else neutral
+        width = int(max_width * value / max_value)
+        if width:
+            draw.rounded_rectangle((x0, y, x0 + width, y + 42), radius=6, fill=color)
+        else:
+            draw.line((x0, y + 21, x0 + 7, y + 21), fill=neutral, width=3)
+        draw.text((x0 + max(width, 10) + 14, y + 8), f"{value}개", fill=navy, font=font(19, True))
+
+    # Panel B: ordinary grouped bars by liquidity bucket.
+    panel_y = 690
+    draw.text((70, panel_y), "남은 조합은 어느 유동성 범위에 있었나", fill=navy, font=font(23, True))
+    draw.text((70, panel_y + 30), "저변동성은 상위 60~90%, 소형주는 상위 80~90%에서만 통과 조합이 남았다.", fill=muted, font=font(16))
+    left, top, bottom, right = 160, 770, 925, 1500
+    for tick in range(0, 21, 5):
+        y = bottom - int((bottom - top) * tick / 20)
+        draw.line((left, y, right, y), fill=grid, width=1)
+        draw.text((110, y - 9), str(tick), fill=muted, font=font(13))
+    bar_w, step = 28, 140
+    for index, pct in enumerate(liquidity_order):
+        center = 210 + index * step
+        for offset, signal, color in [(-bar_w - 3, "low_volatility", lowvol), (3, "small_cap", smallcap)]:
+            value = by_liquidity[signal][index]
+            height = int((bottom - top) * value / 20)
+            if value:
+                draw.rounded_rectangle((center + offset, bottom - height, center + offset + bar_w, bottom), radius=4, fill=color)
+                draw.text((center + offset + 4, bottom - height - 25), str(value), fill=navy, font=font(13, True))
+        label = "전체" if pct == 1.0 else f"{int(pct * 100)}%"
+        box = draw.textbbox((0, 0), label, font=font(14))
+        draw.text((center - (box[2] - box[0]) / 2, bottom + 15), label, fill=muted, font=font(14))
+    draw.rectangle((1160, 690, 1178, 708), fill=lowvol)
+    draw.text((1188, 688), "저변동성", fill=navy, font=font(15))
+    draw.rectangle((1320, 690, 1338, 708), fill=smallcap)
+    draw.text((1348, 688), "소형주", fill=navy, font=font(15))
+    draw.text((70, 950), "0은 해당 유동성 구간에서 네 기준을 모두 통과한 조합이 없었다는 뜻이다. 수익률이나 종목 수를 뜻하지 않는다.", fill=muted, font=font(15))
+    save_png(image, "01_robustness_map.png")
+
+
 def evidence_summary() -> None:
     report = json.loads((RESULTS / "reality_check_report.json").read_text(encoding="utf-8"))
     continents = list(csv.DictReader((RESULTS / "alpha_topology_continents.csv").open(encoding="utf-8")))
@@ -462,6 +532,7 @@ def main() -> None:
     with (RESULTS / "alpha_topology_nodes.csv").open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
     topology_map(rows)
+    robustness_summary_chart(rows)
     evidence_summary()
     news_attention_chart()
     consensus_cumulative_chart()
